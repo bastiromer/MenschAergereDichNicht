@@ -1,9 +1,8 @@
-package menschaergerdichnicht
+package fileIO
 
-import menschaergerdichnicht.model.GameField
-import menschaergerdichnicht.fileIO.FileIO
-import scala.concurrent.Future
+import model.GameField
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class FileIOStub extends FileIO:
   var saveCalls: List[(GameField, String)] = List()

@@ -1,17 +1,16 @@
-package menschaergerdichnicht.fileIO
+package fileIO.impl
 
-import menschaergerdichnicht.model.GameField
-import menschaergerdichnicht.fileIO.impl.JsonFileIO
+import model.GameField
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalatest.wordspec.AnyWordSpec
 
 import java.io.{File, FileNotFoundException}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 
 class JsonFileIOSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach {
-  val sut = JsonFileIO()
+  val sut: JsonFileIO = JsonFileIO()
 
   override def beforeEach(): Unit = {
     val folder = new File("saveGameJson")
