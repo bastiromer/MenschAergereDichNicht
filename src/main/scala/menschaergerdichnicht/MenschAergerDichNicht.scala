@@ -1,10 +1,11 @@
 package menschaergerdichnicht
 
-import menschaergerdichnicht.controller.Controller
-import menschaergerdichnicht.controller.impl.DefaultController
-import menschaergerdichnicht.fileIO.FileIO
-import menschaergerdichnicht.fileIO.impl.JsonFileIO
-import menschaergerdichnicht.aview.Tui
+import fileIO.FileIO
+import fileIO.impl.JsonFileIO
+import tui.Tui
+import controller.Controller
+import controller.impl.DefaultController
+
 
 @main def main(): Unit =
   val fileIO: FileIO = JsonFileIO()
