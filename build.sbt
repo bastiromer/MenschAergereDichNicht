@@ -21,7 +21,7 @@ lazy val root = (project in file("."))
   )
 
 lazy val core = (project in file("core"))
-  .dependsOn(model, util, persistence)
+  .dependsOn(model, util, persistence, persistence % "test->test")
   .settings(
     name := "core",
     settings

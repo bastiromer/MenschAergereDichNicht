@@ -1,8 +1,7 @@
 package controller.impl
 
 import model.{GameField, Move, Player}
-import fileIO.FileIO
-import fileIO.impl.JsonFileIO
+import fileIO.FileIOStub
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -11,12 +10,11 @@ import scala.util.{Failure, Success}
 
 
 class DefaultControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach {
-  //var fileIO: FileIOStub = FileIOStub()
-  var fileIO: FileIO = JsonFileIO()
+  var fileIO: FileIOStub = FileIOStub()
   var sut: DefaultController = DefaultController(using fileIO)
 
   override def beforeEach(): Unit = {
-    fileIO = JsonFileIO()
+    fileIO = FileIOStub()
     sut = DefaultController(using fileIO)
   }
 
@@ -141,7 +139,7 @@ class DefaultControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfte
       sut.redo() shouldBe Success(())
     }
 
-    /*
+
     "save successfully" in {
       val target = "test.txt"
       sut.save(target) shouldBe Success(())
@@ -158,7 +156,7 @@ class DefaultControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfte
       sut.load(source) shouldBe Success(())
       fileIO.loadCalls.last shouldBe("test.txt")
     }
-     */
+
 
     "getGameFiled return gameField" in {
       sut.getGameField.toString shouldEqual sut.getGameField.toString
