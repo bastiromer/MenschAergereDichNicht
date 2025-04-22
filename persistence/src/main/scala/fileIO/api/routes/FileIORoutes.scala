@@ -41,7 +41,7 @@ class FileIORoutes:
     path("save") {
       entity(as[String]) { json =>
         val jsonValue: JsValue = Json.parse(json)
-        val filename: String = ((jsonValue \ "filename")).as[String]
+        val filename: String = (jsonValue \ "filename").as[String]
         val fieldValue: GameField = (jsonValue \ "field").as[GameField]
         fileIO.save(fieldValue, filename) match
           case Right(filename) =>
