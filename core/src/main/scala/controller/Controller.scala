@@ -1,6 +1,6 @@
 package controller
 
-import model.{GameField, Move}
+import model.modelComponents.{GameField, Move}
 import util.Observable
 import scala.util.Try
 

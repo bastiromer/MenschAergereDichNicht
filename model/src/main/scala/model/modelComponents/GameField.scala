@@ -1,6 +1,6 @@
-package model
+package model.modelComponents
 
-import model.Player.{Blue, Green, Red, Yellow}
+import Player.{Blue, Green, Red, Yellow}
 
 case class GameField(map: Map[(Int, Int), Cell], gameState: GameState):
   def move(move: Move): GameField =

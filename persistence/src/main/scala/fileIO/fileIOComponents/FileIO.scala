@@ -1,7 +1,6 @@
 package fileIO.fileIOComponents
 
-import model.GameField
-
+import model.modelComponents.GameField
 import scala.concurrent.Future
 
 trait FileIO:

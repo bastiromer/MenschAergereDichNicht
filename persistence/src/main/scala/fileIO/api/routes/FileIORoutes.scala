@@ -5,14 +5,14 @@ import akka.http.scaladsl.model.StatusCodes.*
 import akka.http.scaladsl.model.ContentTypes
 import akka.http.scaladsl.server.Directives.*
 import akka.http.scaladsl.server.{ExceptionHandler, Route}
-import model.GameField
 import org.slf4j.LoggerFactory
 import fileIO.fileIOComponents.impl.JsonFileIO
 import play.api.libs.json.{JsValue, Json}
 import java.io.File
 
-import util.json.JsonReaders.given
-import util.json.JsonWriters.given
+import model.modelComponents.json.JsonReaders.given
+import model.modelComponents.json.JsonWriters.given
+import model.modelComponents.GameField
 
 import scala.io.Source
 

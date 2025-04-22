@@ -1,6 +1,6 @@
 package controller.impl
 
-import model.{GameField, GameState, Move}
+import model.modelComponents.{GameField, GameState, Move}
 import util.Command
 
 class MoveCommander(moves: List[Move], var gameState: GameState) extends Command[GameField]:

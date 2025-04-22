@@ -1,7 +1,7 @@
 package fileIO
 
 import fileIO.fileIOComponents.FileIO
-import model.GameField
+import model.modelComponents.GameField
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

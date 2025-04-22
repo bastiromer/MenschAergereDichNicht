@@ -1,9 +1,9 @@
 package fileIO.fileIOComponents.impl
 
 import fileIO.fileIOComponents.FileIO
-import model.GameField
-import util.json.JsonWriters.gameFieldWrites
-import util.json.JsonReaders.gameFieldReads
+import model.modelComponents.json.JsonWriters.gameFieldWrites
+import model.modelComponents.json.JsonReaders.gameFieldReads
+import model.modelComponents.GameField
 import play.api.libs.json.Json
 
 import scala.concurrent.Future

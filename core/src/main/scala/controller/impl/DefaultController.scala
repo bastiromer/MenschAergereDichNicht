@@ -1,9 +1,9 @@
 package controller.impl
 
-import model.{GameField, Move, Token}
-import fileIO.FileIO
 import util.UndoManager
 import controller.Controller
+import fileIO.fileIOComponents.FileIO
+import model.modelComponents.{GameField, Move, Token}
 
 import scala.util.{Try, Success, Failure}
 import concurrent.ExecutionContext.Implicits.global

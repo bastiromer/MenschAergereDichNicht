@@ -5,9 +5,9 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.*
 import akka.http.scaladsl.server.Directives.*
 import fileIO.fileIOComponents.impl.JsonFileIO
-import model.GameField
 import play.api.libs.json.Json
-import util.json.JsonReaders.given
+import model.modelComponents.json.JsonReaders.given
+import model.modelComponents.GameField
 
 import java.io.File
 import scala.io.{Source, StdIn}

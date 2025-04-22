@@ -1,4 +1,4 @@
-package model
+package model.modelComponents
 
 object Player:
   case object Red extends Player("Red")

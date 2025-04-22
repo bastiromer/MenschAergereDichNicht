@@ -1,7 +1,7 @@
 package fileIO.impl
 
 import fileIO.fileIOComponents.impl.JsonFileIO
-import model.GameField
+import model.modelComponents.GameField
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

@@ -1,7 +1,7 @@
 package controller.impl
 
-import model.{GameField, Move, Player}
 import fileIO.FileIOStub
+import model.modelComponents.{GameField, Move, Player}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

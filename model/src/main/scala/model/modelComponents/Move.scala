@@ -1,4 +1,4 @@
-package model
+package model.modelComponents
 
 case class Move(fromIndex: Int, toIndex: Int):
   def toCell(map: Map[(Int, Int), Cell]): Cell =

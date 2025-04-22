@@ -1,6 +1,6 @@
 package controller.impl
 
-import model.{GameState, GameField}
+import model.modelComponents.{GameField, GameState}
 import util.Command
 
 class DiceCommander(var gameState: GameState) extends Command[GameField]:

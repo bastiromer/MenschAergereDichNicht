@@ -1,4 +1,4 @@
-package model
+package model.modelComponents
 
 case class Token(player: Player, number: Int):
   override def toString: String =
