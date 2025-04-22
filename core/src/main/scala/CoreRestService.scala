@@ -20,7 +20,7 @@ import scala.util.{Failure, Success}
   val controller: Controller = DefaultController(using JsonFileIO())
 
   val helpText =
-    """|✅ Willkommen zur Core REST API für "Mensch ärgere dich nicht"!
+    """| Willkommen zur Core REST API für "Mensch ärgere dich nicht"!
        |
        |🔧 Verfügbare Endpunkte:
        |  ➤ GET    /api/gamefield        → Aktuelles Spielfeld anzeigen
