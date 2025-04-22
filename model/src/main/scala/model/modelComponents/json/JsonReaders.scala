@@ -1,6 +1,6 @@
-package util.json
+package model.modelComponents.json
 
-import model.{GameField, GameState, Cell, Player, Token}
+import model.modelComponents.{Cell, GameField, GameState, Move, Player, Token}
 import play.api.libs.json.*
 
 
@@ -46,3 +46,10 @@ object JsonReaders:
         index <- (json \ "index").validate[Int]
         token <- (json \ "token").validateOpt[Token]
       } yield Cell(isAPlayField, index, token)
+
+  implicit val moveReads: Reads[Move] = new Reads[Move]:
+    def reads(json: JsValue): JsResult[Move] =
+      for {
+        fromIndex <- (json \ "fromIndex").validate[Int]
+        toIndex <- (json \ "toIndex").validate[Int]
+      } yield Move(fromIndex, toIndex)
