@@ -1,4 +1,4 @@
-package model
+package model.modelComponents
 
 case class Cell(isAPlayField: Boolean, index: Int, token: Option[Token]):
   override def toString: String =

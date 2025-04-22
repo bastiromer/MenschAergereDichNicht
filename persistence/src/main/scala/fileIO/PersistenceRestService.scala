@@ -1,21 +1,17 @@
-package persistence
+package fileIO
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.*
 import akka.http.scaladsl.server.Directives.*
-import fileIO.impl.JsonFileIO
-import model.GameField
+import fileIO.fileIOComponents.impl.JsonFileIO
 import play.api.libs.json.Json
+import model.modelComponents.json.JsonReaders.given
+import model.modelComponents.GameField
 
-import scala.io.Source
-import scala.io.StdIn
 import java.io.File
-import scala.util.{Success, Failure, Try}
-
-
-import util.json.JsonReaders.given
-import util.json.JsonWriters.given
+import scala.io.{Source, StdIn}
+import scala.util.{Failure, Success, Try}
 
 @main def runPersistenceApi(): Unit =
   implicit val system: ActorSystem = ActorSystem("persistence-rest-api")

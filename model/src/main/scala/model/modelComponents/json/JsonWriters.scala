@@ -1,6 +1,6 @@
-package util.json
+package model.modelComponents.json
 
-import model.{GameField, GameState, Cell, Token}
+import model.modelComponents.{Cell, GameField, GameState, Move, Token}
 import play.api.libs.json.{JsValue, Json, Writes}
 
 
@@ -44,5 +44,13 @@ object JsonWriters:
         "player" -> token.toString,
         "number" -> token.number
       )
+
+  implicit val moveWrites: Writes[Move] = new Writes[Move] :
+    def writes(move: Move): JsValue =
+      Json.obj(
+        "fromIndex" -> move.fromIndex,
+        "toIndex" -> move.toIndex
+      )
+
 
 

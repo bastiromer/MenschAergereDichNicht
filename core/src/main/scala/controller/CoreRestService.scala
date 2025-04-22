@@ -1,4 +1,4 @@
-package core
+package controller
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -7,7 +7,7 @@ import akka.http.scaladsl.server.Directives.*
 import akka.http.scaladsl.server.Route
 import controller.Controller
 import controller.impl.DefaultController
-import fileIO.impl.JsonFileIO
+import fileIO.fileIOComponents.impl.JsonFileIO
 import play.api.libs.json.Json
 
 import scala.concurrent.ExecutionContextExecutor

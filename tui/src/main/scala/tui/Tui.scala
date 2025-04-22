@@ -1,8 +1,8 @@
 package tui
 
 import controller.Controller
+import model.modelComponents.Move
 import util.Observer
-import model.Move
 
 import scala.io.StdIn.readLine
 import scala.util.{Try, Success, Failure}

@@ -1,10 +1,10 @@
 package menschaergerdichnicht
 
-import fileIO.FileIO
-import fileIO.impl.JsonFileIO
 import tui.Tui
 import controller.Controller
 import controller.impl.DefaultController
+import fileIO.fileIOComponents.FileIO
+import fileIO.fileIOComponents.impl.JsonFileIO
 
 
 @main def main(): Unit =
