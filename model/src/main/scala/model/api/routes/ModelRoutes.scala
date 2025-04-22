@@ -80,7 +80,7 @@ class ModelRoutes:
     path("rollDice") {
       entity(as[String]) { json =>
         val jsonValue: JsValue = Json.parse(json)
-        val gameField: GameField = ((jsonValue \ "field").as[GameField]).rollDice
+        val gameField: GameField = (jsonValue \ "field").as[GameField].rollDice
         val content = Json.toJson(gameField)
         complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content.toString)))
       }

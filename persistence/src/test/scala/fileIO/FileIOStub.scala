@@ -11,8 +11,10 @@ class FileIOStub extends FileIO:
   var loadCalls: List[String] = List()
   var getTargetsResult: List[String] = List()
 
-  def save(gameField: GameField, target: String): Unit =
+  def save(gameField: GameField, target: String): Either[(String, String), String] = {
     saveCalls = (gameField, target) :: saveCalls
+    Right(target + ".json")
+  }
 
   def load(source: String): Future[GameField]=
     loadCalls = source :: loadCalls
