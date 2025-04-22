@@ -11,7 +11,7 @@ class UndoManager[T]:
     undoStack match {
       case Nil => t
       case head :: stack =>
-        val result = head.undoStep(t)
+        val result = head.undoStep(t) 
         undoStack = stack
         redoStack = head :: redoStack
         result
