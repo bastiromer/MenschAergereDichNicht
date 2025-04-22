@@ -7,7 +7,12 @@ lazy val settings = Seq(
   libraryDependencies ++= Seq(
     "org.playframework" %% "play-json" % "3.0.1",
     "org.scalatest" %% "scalatest" % "3.2.17" % Test,
-    "org.scalactic" %% "scalactic" % "3.2.17"
+    "org.scalactic" %% "scalactic" % "3.2.17",
+    "com.typesafe.akka" %% "akka-http" % "10.2.9" cross CrossVersion.for3Use2_13,
+    "com.typesafe.akka" %% "akka-stream" % "2.6.20" cross CrossVersion.for3Use2_13,
+    "com.typesafe.akka" %% "akka-actor-typed" % "2.6.20" cross CrossVersion.for3Use2_13,
+    "ch.qos.logback" % "logback-classic" % "1.4.11",
+    "org.playframework" %% "play-json" % "3.0.1"
   )
 )
 
@@ -24,13 +29,7 @@ lazy val core = (project in file("core"))
   .dependsOn(model, util, persistence, persistence % "test->test")
   .settings(
     name := "core",
-    settings,
-    libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % "10.2.9" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka" %% "akka-stream" % "2.6.20" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka" %% "akka-actor-typed" % "2.6.20" cross CrossVersion.for3Use2_13,
-      "ch.qos.logback" % "logback-classic" % "1.4.11"
-    )
+    settings
   )
 
 
@@ -44,14 +43,7 @@ lazy val persistence = (project in file("persistence"))
   .dependsOn(model, util)
   .settings(
     name := "persistence",
-    settings,
-    libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % "10.2.9" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka" %% "akka-stream" % "2.6.20" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka" %% "akka-actor-typed" % "2.6.20" cross CrossVersion.for3Use2_13,
-      "org.playframework" %% "play-json" % "3.0.1",
-      "ch.qos.logback" % "logback-classic" % "1.4.11" // Logging für SLF4J Warnung
-    )
+    settings
   )
 
 
