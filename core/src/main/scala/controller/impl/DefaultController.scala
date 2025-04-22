@@ -4,6 +4,7 @@ import util.UndoManager
 import controller.Controller
 import fileIO.fileIOComponents.FileIO
 import model.modelComponents.{GameField, Move, Token}
+import model.modelComponents.*
 
 import scala.util.{Try, Success, Failure}
 import concurrent.ExecutionContext.Implicits.global
@@ -19,7 +20,7 @@ class DefaultController(using fileIO: FileIO) extends Controller:
     if (gameField.gameState.shouldDice) {
       throw new IllegalStateException("You have to Dice")
     } else {
-      model.possibleMoves(gameField)
+      gameField.possibleMoves()
     }
   }
 
