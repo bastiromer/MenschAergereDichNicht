@@ -1,4 +1,4 @@
-package core.api.service
+package controller.api.service
 
 
 import controller.api.client.ModelClient
