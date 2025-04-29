@@ -5,8 +5,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.*
 import akka.http.scaladsl.server.Directives.*
 import akka.http.scaladsl.server.Route
-import controller.Controller
-import controller.impl.DefaultController
+import controller.controllerComponents.ControllerInterface
+import controller.controllerComponents.impl.DefaultController
 import fileIO.fileIOComponents.impl.JsonFileIO
 import play.api.libs.json.Json
 
@@ -17,7 +17,7 @@ import scala.util.{Failure, Success}
   implicit val system: ActorSystem = ActorSystem("core-rest-api")
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-  val controller: Controller = DefaultController(using JsonFileIO())
+  val controller: ControllerInterface = DefaultController(using JsonFileIO())
 
   val helpText =
     """| Willkommen zur Core REST API für "Mensch ärgere dich nicht"!

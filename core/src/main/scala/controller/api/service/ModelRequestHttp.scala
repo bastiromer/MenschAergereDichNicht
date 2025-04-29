@@ -2,26 +2,55 @@ package controller.api.service
 
 
 import controller.api.client.ModelClient
+import model.modelComponents.{Cell, GameField, Move}
+import play.api.libs.json.Json
+import model.modelComponents.json.JsonWriters.given
+import model.modelComponents.json.JsonReaders.given
 
-import model.GameField
-import play.api.libs.json.{JsObject, Json}
-import util.json.JsonWriters.given
-import util.json.JsonReaders.given
-
-import scala.concurrent.duration.*
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object ModelRequestHttp:
 
-  def save(gameField: GameField, filename: String): Unit =
-    val jsonBody: JsObject = Json.obj("gameField" -> Json.toJson(gameField))
-    val endpoint = s"/save/$filename"
-    Await.result(ModelClient.postRequest(endpoint, jsonBody), 5.seconds)
+  def gameFieldInit(): GameField =
+    Await.result(ModelClient.postRequest("api/model/field/gameFieldinit",Json.obj()).map { json =>
+      Json.parse(json).as[GameField]
+    }, 5.seconds)
 
-  def load(filename: String): GameField =
-    val jsonString = Await.result(ModelClient.getRequest(s"/load/$filename"), 5.seconds)
-    Json.parse(jsonString).as[GameField]
+  def possibleMoves(gameField: GameField): List[Move] =
+    val jsonField = Json.toJson(gameField).toString()
+    Await.result(ModelClient.postRequest("api/model/field/possibleMoves", Json.obj(
+      "field" -> jsonField
+    )).map { jsonString =>
+      Json.parse(jsonString).as[List[Move]]
+    }, 5.seconds)
 
-  def getTargets(): List[String] =
-    val jsonString = Await.result(ModelClient.getRequest("/targets"), 5.seconds)
-    Json.parse(jsonString).as[List[String]]
+  def toCell(gameField: GameField, move: Move): Cell =
+    val jsonField = Json.toJson(gameField).toString()
+    val jsonMove = Json.toJson(move).toString()
+    Await.result(ModelClient.postRequest("api/model/field/toCell", Json.obj(
+      "field" -> jsonField,
+      "move" -> jsonMove
+    )).map { jsonString =>
+      Json.parse(jsonString).as[Cell]
+    }, 5.seconds)
+
+  def move(gameField: GameField, move: Move): GameField =
+    val jsonField = Json.toJson(gameField).toString()
+    val jsonMove = Json.toJson(move).toString()
+    Await.result(ModelClient.postRequest("api/model/field/move", Json.obj(
+      "field" -> jsonField,
+      "move" -> jsonMove
+    )).map { jsonString =>
+      Json.parse(jsonString).as[GameField]
+    }, 5.seconds)
+    
+  def rollDice(gameField: GameField): GameField =
+    val jsonField = Json.toJson(gameField).toString()
+    //gameField.rollDice
+    Await.result(ModelClient.postRequest("api/model/field/rollDice", Json.obj(
+      "field" -> jsonField
+    )).map { jsonString =>
+      Json.parse(jsonString).as[GameField]
+    }, 5.seconds)

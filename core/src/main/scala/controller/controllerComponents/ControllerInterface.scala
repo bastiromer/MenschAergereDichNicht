@@ -1,10 +1,11 @@
-package controller
+package controller.controllerComponents
 
 import model.modelComponents.{GameField, Move}
 import util.Observable
+
 import scala.util.Try
 
-trait Controller extends Observable:
+trait ControllerInterface extends Observable:
   def getGameField: GameField
   def possibleMoves: Try[List[Move]]
   def makeMove(move: Move): Try[Unit]
