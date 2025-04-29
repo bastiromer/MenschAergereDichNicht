@@ -37,7 +37,7 @@ class ModelRoutes:
         val jsonValue: JsValue = Json.parse(json)
         val gameField: GameField = (jsonValue \ "field").as[GameField]
         val content = GameField(gameField.map, gameField.gameState).possibleMoves()
-        complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content.toString)))
+        complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, Json.toJson(content).toString)))
       }
     }
   }
@@ -81,8 +81,8 @@ class ModelRoutes:
       entity(as[String]) { json =>
         val jsonValue: JsValue = Json.parse(json)
         val gameField: GameField = (jsonValue \ "field").as[GameField].rollDice
-        val content = Json.toJson(gameField)
-        complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content.toString)))
+        val content = Json.toJson(gameField).toString()
+        complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content)))
       }
     }
   }
@@ -93,8 +93,8 @@ class ModelRoutes:
         val jsonValue: JsValue = Json.parse(json)
         val move: Move = (jsonValue \ "move").as[Move]
         val gameField: GameField = (jsonValue \ "field").as[GameField]
-        val content = move.toCell(gameField.map)
-        complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content.toString)))
+        val content: GameField = gameField.move(move)
+        complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, Json.toJson(content).toString)))
       }
     }
   }
