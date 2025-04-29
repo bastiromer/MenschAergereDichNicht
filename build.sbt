@@ -14,7 +14,8 @@ lazy val settings = Seq(
     "ch.qos.logback" % "logback-classic" % "1.5.18",
     "org.playframework" %% "play-json" % "3.0.4",
     "com.typesafe.akka" %% "akka-stream-testkit" % "2.8.8" % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % "10.5.3" % Test
+    "com.typesafe.akka" %% "akka-http-testkit" % "10.5.3" % Test,
+    "org.mockito" % "mockito-core" % "5.17.0" % Test,
   )
 )
 
