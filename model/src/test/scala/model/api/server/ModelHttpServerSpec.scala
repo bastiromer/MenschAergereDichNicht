@@ -12,18 +12,18 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class ModelHttpServerSpec extends AnyWordSpec with BeforeAndAfterAll:
-  private implicit val system: ActorSystem = ActorSystem("PersistenceHttpServerTest")
+  private implicit val system: ActorSystem = ActorSystem("ModelHttpServerTest")
   private implicit val executionContext: ExecutionContext = system.dispatcher
 
-  private val PERSISTENCE_BASE_URL = "http://localhost:8081/"
+  private val MODEL_BASE_URL = "http://localhost:8081/"
 
-  private var testPersistenceServerBinding: Option[ServerBinding] = None
+  private var testModelServerBinding: Option[ServerBinding] = None
 
   override def beforeAll(): Unit =
-    testPersistenceServerBinding = Some(Await.result(ModelHttpServer.run, 10.seconds))
+    testModelServerBinding = Some(Await.result(ModelHttpServer.run, 10.seconds))
 
   override def afterAll(): Unit =
-    testPersistenceServerBinding.foreach(binding =>
+    testModelServerBinding.foreach(binding =>
       Await.result(binding.unbind(), 10.seconds)
     )
     Await.result(system.terminate(), 10.seconds)
@@ -34,7 +34,7 @@ class ModelHttpServerSpec extends AnyWordSpec with BeforeAndAfterAll:
         .singleRequest(
           HttpRequest(
             method = HttpMethods.GET,
-            uri = PERSISTENCE_BASE_URL.concat("api/model/field/preConnect")
+            uri = MODEL_BASE_URL.concat("api/model/field/preConnect")
           )
         ).map { response => response.status }
       val response: StatusCode = Await.result(futureResponse, 5.seconds)
