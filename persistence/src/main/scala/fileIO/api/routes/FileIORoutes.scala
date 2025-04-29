@@ -37,13 +37,13 @@ class FileIORoutes:
     }
   }
 
-  private def handleSaveRequest: Route = post {
+  private def handleSaveRequest: Route = post:
     path("save") {
       entity(as[String]) { json =>
         val jsonValue: JsValue = Json.parse(json)
-        val filename: String = (jsonValue \ "filename").as[String]
-        val fieldValue: GameField = (jsonValue \ "field").as[GameField]
-        fileIO.save(fieldValue, filename) match
+        val filename: String = (jsonValue \ "fileName").as[String]
+        val gameField: GameField = (jsonValue \ "gameField").as[GameField]
+        fileIO.save(gameField, filename) match
           case Right(filename) =>
             logger.info(s"Persistence Service [FileIO] -- Field successfully saved to $filename")
             complete(StatusCodes.OK)
@@ -52,11 +52,12 @@ class FileIORoutes:
             complete(StatusCodes.InternalServerError)
       }
     }
-  }
 
   private def handleLoadRequest: Route = post {
     path("load") {
-      entity(as[String]) { filename =>
+      entity(as[String]) { json =>
+        val jsonValue: JsValue = Json.parse(json)
+        val filename: String = (jsonValue \ "fileName").as[String]
         val fullPath = s"$basePath/$filename.json"
         val file = new File(fullPath)
 
@@ -65,7 +66,8 @@ class FileIORoutes:
           complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content)))
         } else {
           val json = Json.obj("status" -> "error", "message" -> "File not found")
-          complete(HttpResponse(StatusCodes.NotFound, entity = HttpEntity(ContentTypes.`application/json`, json.toString())))
+          complete(StatusCodes.InternalServerError)
+          //complete(HttpResponse(StatusCodes.NotFound, entity = HttpEntity(ContentTypes.`application/json`, json.toString())))
         }
       }
     }

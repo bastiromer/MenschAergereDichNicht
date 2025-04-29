@@ -8,11 +8,13 @@ lazy val settings = Seq(
     "org.playframework" %% "play-json" % "3.0.1",
     "org.scalatest" %% "scalatest" % "3.2.17" % Test,
     "org.scalactic" %% "scalactic" % "3.2.17",
-    "com.typesafe.akka" %% "akka-http" % "10.2.9" cross CrossVersion.for3Use2_13,
-    "com.typesafe.akka" %% "akka-stream" % "2.6.20" cross CrossVersion.for3Use2_13,
-    "com.typesafe.akka" %% "akka-actor-typed" % "2.6.20" cross CrossVersion.for3Use2_13,
-    "ch.qos.logback" % "logback-classic" % "1.4.11",
-    "org.playframework" %% "play-json" % "3.0.1"
+    "com.typesafe.akka" %% "akka-http" % "10.5.3", //cross CrossVersion.for3Use2_13,
+    "com.typesafe.akka" %% "akka-stream" % "2.8.8", //cross CrossVersion.for3Use2_13,
+    "com.typesafe.akka" %% "akka-actor-typed" % "2.8.8", //cross CrossVersion.for3Use2_13,
+    "ch.qos.logback" % "logback-classic" % "1.5.18",
+    "org.playframework" %% "play-json" % "3.0.4",
+    "com.typesafe.akka" %% "akka-stream-testkit" % "2.8.8" % Test,
+    "com.typesafe.akka" %% "akka-http-testkit" % "10.5.3" % Test
   )
 )
 
