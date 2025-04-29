@@ -1,4 +1,4 @@
-package model
+package model.modelComponents
 
 import model.modelComponents.{Player, Token}
 import org.scalatest.matchers.should.Matchers.*

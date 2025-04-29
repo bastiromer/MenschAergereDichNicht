@@ -1,4 +1,4 @@
-package model
+package model.modelComponents
 
 import model.modelComponents.Player
 import org.scalatest.matchers.should.Matchers.*
