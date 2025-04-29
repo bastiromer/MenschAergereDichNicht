@@ -1,4 +1,4 @@
-package fileIO
+package fileIO.fileIOComponents
 
 import fileIO.fileIOComponents.FileIO
 import model.modelComponents.GameField
