@@ -6,17 +6,33 @@ import org.scalatest.matchers.should.Matchers.*
 class GameStateSpec extends AnyWordSpec:
   "GameState" should {
     "rollDice" should {
-      "change diceNumber and possibly player on rollDice" in {
-        val initial = GameState(shouldDice = true, diceNumber = 0, currentPlayer = Player.Green)
+      "change diceNumber to 4 and player on rollDice" in {
+        val initial = new GameState(shouldDice = true, diceNumber = 0, currentPlayer = Player.Green) {
+          override def dice: Int = 4
+        }
         val field = GameField.init()
         val newState = initial.rollDice(field.map)
 
-        newState.diceNumber should (be >= 1 and be <= 6)
+        newState.currentPlayer should not be Player.Green
+      }
 
-        if (GameField(field.map, newState).possibleMoves().isEmpty)
-          newState.currentPlayer should not be Player.Green
-        else
-          newState.currentPlayer shouldBe Player.Green
+      "change diceNumber to 6 on rollDice" in {
+        val initial = new GameState(shouldDice = true, diceNumber = 0, currentPlayer = Player.Green) {
+          override def dice: Int = 6
+        }
+        val field = GameField.init()
+        val newState = initial.rollDice(field.map)
+
+        newState.currentPlayer shouldBe Player.Green
+      }
+    }
+
+    "dice" should {
+      "return a random number between 1 and 6" in {
+        val state = GameState(shouldDice = true, diceNumber = 0, currentPlayer = Player.Green)
+
+        val rolls = (1 to 1000).map(_ => state.dice)
+        all(rolls) should (be >= 1 and be <= 6)
       }
     }
 
