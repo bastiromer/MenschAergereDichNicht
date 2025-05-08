@@ -83,7 +83,13 @@ class FileIORoutesSpec extends AnyWordSpec with ScalatestRouteTest with BeforeAn
       }
     }
 
-
+    "receiving a getTarget request" should {
+        "return 200 OK and JSON array of targets" in {
+          Get("/getTargets") ~> Route.seal(routes) ~> check {
+            status shouldBe StatusCodes.OK
+          }
+        }
+    }
 
     "handle request exception, the exceptionHandler" should {
       "return 404 Not Found for NoSuchElementException on GET request" in {

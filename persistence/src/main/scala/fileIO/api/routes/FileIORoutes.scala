@@ -85,8 +85,5 @@ class FileIORoutes:
   }
 
   private val exceptionHandler = ExceptionHandler {
-    case e: IllegalArgumentException =>
-      complete(Conflict -> e.getMessage)
-    case e: Throwable =>
-      complete(InternalServerError -> e.getMessage)
+    e => complete(InternalServerError -> e.getMessage)
   }
