@@ -11,7 +11,6 @@ import play.api.libs.json.{JsValue, Json}
 import java.io.File
 
 import model.modelComponents.json.JsonReaders.given
-import model.modelComponents.json.JsonWriters.given
 import model.modelComponents.GameField
 
 import scala.io.Source
