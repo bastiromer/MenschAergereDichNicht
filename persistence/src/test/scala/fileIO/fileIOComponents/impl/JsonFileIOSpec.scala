@@ -1,6 +1,5 @@
 package fileIO.fileIOComponents.impl
 
-import fileIO.fileIOComponents.impl.JsonFileIO
 import model.modelComponents.GameField
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
@@ -12,7 +11,7 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-class JsonFileIOSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach {
+class JsonFileIOSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach:
   val sut: JsonFileIO = JsonFileIO()
 
   override def beforeEach(): Unit = {
@@ -68,4 +67,3 @@ class JsonFileIOSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach {
       folder.exists() shouldBe true
     }
   }
-}
