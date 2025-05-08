@@ -1,10 +1,9 @@
 package model.modelComponents
 
-import model.modelComponents.{Player, Token}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
-class TokenSpec extends AnyWordSpec {
+class TokenSpec extends AnyWordSpec:
   "A Token" when {
     "converted to string" should {
       "return the correct representation" in {
@@ -38,5 +37,3 @@ class TokenSpec extends AnyWordSpec {
       }
     }
   }
-}
-

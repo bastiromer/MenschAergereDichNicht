@@ -8,7 +8,7 @@ import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import model.modelComponents.*
 import model.modelComponents.json.JsonReaders.given
 import model.modelComponents.json.JsonWriters.given
-import play.api.libs.json.{JsLookupResult, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 
 
 class ModelRoutes:

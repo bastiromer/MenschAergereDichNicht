@@ -1,10 +1,9 @@
 package model.modelComponents
 
-import model.modelComponents.Player
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
-class PlayerSpec extends AnyWordSpec {
+class PlayerSpec extends AnyWordSpec:
   "Player" when {
     "created from string" should {
       "return the correct player" in {
@@ -55,4 +54,3 @@ class PlayerSpec extends AnyWordSpec {
       }
     }
   }
-}

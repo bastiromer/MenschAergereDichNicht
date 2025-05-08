@@ -5,12 +5,12 @@ ThisBuild / scalaVersion := "3.6.4"
 
 lazy val settings = Seq(
   libraryDependencies ++= Seq(
-    "org.playframework" %% "play-json" % "3.0.1",
-    "org.scalatest" %% "scalatest" % "3.2.17" % Test,
-    "org.scalactic" %% "scalactic" % "3.2.17",
-    "com.typesafe.akka" %% "akka-http" % "10.5.3", //cross CrossVersion.for3Use2_13,
-    "com.typesafe.akka" %% "akka-stream" % "2.8.8", //cross CrossVersion.for3Use2_13,
-    "com.typesafe.akka" %% "akka-actor-typed" % "2.8.8", //cross CrossVersion.for3Use2_13,
+    "org.playframework" %% "play-json" % "3.0.4",
+    "org.scalatest" %% "scalatest" % "3.2.19" % Test,
+    "org.scalactic" %% "scalactic" % "3.2.19",
+    "com.typesafe.akka" %% "akka-http" % "10.5.3",
+    "com.typesafe.akka" %% "akka-stream" % "2.8.8",
+    "com.typesafe.akka" %% "akka-actor-typed" % "2.8.8",
     "ch.qos.logback" % "logback-classic" % "1.5.18",
     "org.playframework" %% "play-json" % "3.0.4",
     "com.typesafe.akka" %% "akka-stream-testkit" % "2.8.8" % Test,
@@ -23,6 +23,7 @@ lazy val settings = Seq(
 lazy val root = (project in file("."))
   .aggregate(model, util, persistence, core, tui)
   .dependsOn(model, util, persistence, core, tui)
+  .enablePlugins(ScoverageSbtPlugin)
   .settings(
     name := "MenschAergerDichNicht",
     settings

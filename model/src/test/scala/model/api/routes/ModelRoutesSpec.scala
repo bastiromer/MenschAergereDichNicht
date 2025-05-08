@@ -88,6 +88,14 @@ class ModelRoutesSpec extends AnyWordSpec with ScalatestRouteTest with BeforeAnd
       }
     }
 
+    "return 409 Conflict for IllegalArgumentException in /fromString" in {
+      val invalidInput = "x"
+      Post("/fromString", invalidInput) ~> Route.seal(routes) ~> check {
+        status shouldBe StatusCodes.Conflict
+        responseAs[String] should include("Invalid player initial")
+      }
+    }
+
     "return 500 for invalid JSON" in {
       val invalidJson = "invalid"
       Post("/move", invalidJson) ~> Route.seal(routes) ~> check {
@@ -97,15 +105,3 @@ class ModelRoutesSpec extends AnyWordSpec with ScalatestRouteTest with BeforeAnd
     }
   }
 }
-
-
-
-/*
-handlePreConnectRequest,
-handlePossibleMoves,
-handleFromString,
-handleToCell,
-handleGameFieldinit,
-handleRollDice,
-handleMove
-*/
