@@ -1,4 +1,4 @@
-package controller.api.server
+package core.api.server
 
 import akka.Done
 import akka.actor.{ActorSystem, CoordinatedShutdown}
@@ -6,8 +6,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import controller.api.module.CoreModule.given_ControllerInterface
-import controller.api.routes.CoreRoutes
+import core.api.module.CoreModule.given_ControllerInterface
+import core.api.routes.CoreRoutes
 import org.slf4j.LoggerFactory
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}

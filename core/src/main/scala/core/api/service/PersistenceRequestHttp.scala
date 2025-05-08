@@ -1,6 +1,6 @@
-package controller.api.service
+package core.api.service
 
-import controller.api.client.PersistenceClient
+import core.api.client.PersistenceClient
 import play.api.libs.json.Json
 
 import scala.concurrent.duration.DurationInt

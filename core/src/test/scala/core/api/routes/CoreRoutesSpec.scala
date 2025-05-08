@@ -1,9 +1,9 @@
-package controller.api.routes
+package core.api.routes
 
 import akka.http.scaladsl.model.*
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import controller.controllerComponents.ControllerInterface
+import core.controllerComponents.ControllerInterface
 import model.modelComponents.{GameField, Move}
 import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach

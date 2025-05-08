@@ -1,6 +1,6 @@
 package tui
 
-import controller.controllerComponents.ControllerInterface
+import core.controllerComponents.ControllerInterface
 import model.modelComponents.Move
 import tui.api.service.CoreRequestHttp
 import util.Observer

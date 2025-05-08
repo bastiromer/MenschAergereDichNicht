@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.{Failure, Success}
-import controller.api.module.CoreModule.given_ControllerInterface
+import core.api.module.CoreModule.given_ControllerInterface
 import tui.api.routes.TUIRoutes
 import tui.api.service.CoreRequestHttp
 import tui.Tui

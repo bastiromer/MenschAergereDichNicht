@@ -1,12 +1,12 @@
-package controller
+package core
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.*
 import akka.http.scaladsl.server.Directives.*
 import akka.http.scaladsl.server.Route
-import controller.controllerComponents.ControllerInterface
-import controller.controllerComponents.impl.DefaultController
+import core.controllerComponents.ControllerInterface
+import core.controllerComponents.impl.DefaultController
 import fileIO.fileIOComponents.impl.JsonFileIO
 import play.api.libs.json.Json
 

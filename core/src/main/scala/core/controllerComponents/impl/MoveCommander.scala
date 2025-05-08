@@ -1,6 +1,6 @@
-package controller.controllerComponents.impl
+package core.controllerComponents.impl
 
-import controller.api.service.ModelRequestHttp
+import core.api.service.ModelRequestHttp
 import model.modelComponents.{GameField, GameState, Move}
 import util.Command
 

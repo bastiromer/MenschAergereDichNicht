@@ -1,10 +1,10 @@
-package controller.api.routes
+package core.api.routes
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.StatusCodes.*
 import akka.http.scaladsl.server.Directives.*
 import akka.http.scaladsl.server.{ExceptionHandler, Route}
-import controller.controllerComponents.ControllerInterface
+import core.controllerComponents.ControllerInterface
 import model.modelComponents.json.JsonWriters.given
 import model.modelComponents.json.JsonReaders.given
 import model.modelComponents.Move

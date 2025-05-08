@@ -1,4 +1,4 @@
-package controller.controllerComponents
+package core.controllerComponents
 
 import model.modelComponents.{GameField, Move}
 import util.Observable

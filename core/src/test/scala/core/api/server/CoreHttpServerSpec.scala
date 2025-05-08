@@ -1,4 +1,4 @@
-package controller.api.server
+package core.api.server
 
 import akka.Done
 import akka.actor.{ActorSystem, CoordinatedShutdown}

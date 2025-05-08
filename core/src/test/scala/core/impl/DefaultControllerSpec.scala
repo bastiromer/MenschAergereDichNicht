@@ -1,6 +1,6 @@
-package controller.impl
+package core.impl
 
-import controller.controllerComponents.impl.DefaultController
+import core.controllerComponents.impl.DefaultController
 import fileIO.fileIOComponents.FileIOStub
 import model.modelComponents.{GameField, Move, Player}
 import org.scalatest.BeforeAndAfterEach

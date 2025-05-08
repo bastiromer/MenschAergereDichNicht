@@ -1,7 +1,7 @@
-package controller.api.module
+package core.api.module
 
-import controller.controllerComponents.ControllerInterface
-import controller.controllerComponents.impl.DefaultController
+import core.controllerComponents.ControllerInterface
+import core.controllerComponents.impl.DefaultController
 import fileIO.fileIOComponents.FileIO
 import fileIO.fileIOComponents.impl.JsonFileIO
 

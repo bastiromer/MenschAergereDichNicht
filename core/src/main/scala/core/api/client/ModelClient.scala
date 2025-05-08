@@ -1,24 +1,25 @@
-package controller.api.client
+package core.api.client
 
 import akka.Done
 import akka.actor.{ActorSystem, CoordinatedShutdown}
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.*
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import org.slf4j.LoggerFactory
 import play.api.libs.json.JsObject
+
 import scala.concurrent.{ExecutionContext, Future}
 
-object PersistenceClient:
+object ModelClient:
   private[client] implicit val system: ActorSystem = ActorSystem(getClass.getSimpleName.init)
   private implicit val ec: ExecutionContext = system.dispatcher
 
   private val logger = LoggerFactory.getLogger(getClass.getName.init)
   private val http = Http(system)
+  
+  private val MODEL_BASE_URL = "http://localhost:8081/"
 
-  private val PERSISTENCE_BASE_URL = "http://localhost:8080/"
-
-  CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceStop, "shutdown-persistence-client") { () =>
+  CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceStop, "shutdown-model-client") { () =>
     shutdown
   }
 
@@ -26,7 +27,7 @@ object PersistenceClient:
     sendRequest(
       HttpRequest(
         method = HttpMethods.GET,
-        uri = PERSISTENCE_BASE_URL.concat(endpoint)
+        uri = MODEL_BASE_URL.concat(endpoint)
       )
     )
 
@@ -34,7 +35,7 @@ object PersistenceClient:
     sendRequest(
       HttpRequest(
         method = HttpMethods.POST,
-        uri = PERSISTENCE_BASE_URL.concat(endpoint),
+        uri = MODEL_BASE_URL.concat(endpoint),
         entity = HttpEntity(ContentTypes.`application/json`, json.toString())
       )
     )
@@ -53,5 +54,5 @@ object PersistenceClient:
     }
 
   private def shutdown: Future[Done] =
-    logger.info("Core Service -- Shutting Down Persistence Client...")
+    logger.info("Core Service -- Shutting Down Model Client...")
     http.shutdownAllConnectionPools().map(_ => Done)

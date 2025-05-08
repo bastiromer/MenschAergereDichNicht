@@ -1,7 +1,7 @@
-package controller.controllerComponents.impl
+package core.controllerComponents.impl
 
-import controller.api.service.{ModelRequestHttp, PersistenceRequestHttp}
-import controller.controllerComponents.ControllerInterface
+import core.api.service.{ModelRequestHttp, PersistenceRequestHttp}
+import core.controllerComponents.ControllerInterface
 import util.UndoManager
 import fileIO.fileIOComponents.FileIO
 import model.modelComponents.{GameField, Move, Token}

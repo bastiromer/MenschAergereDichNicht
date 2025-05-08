@@ -1,7 +1,7 @@
-package controller.api.service
+package core.api.service
 
 
-import controller.api.client.ModelClient
+import core.api.client.ModelClient
 import model.modelComponents.{Cell, GameField, Move}
 import play.api.libs.json.Json
 import model.modelComponents.json.JsonWriters.given
