@@ -38,7 +38,7 @@ object TuiHttpServer:
       case Failure(exception) => logger.error(s"TUI Service -- Http Server failed to start", exception)
     }
 
-    tui.run
+    tui.run()
     serverBinding
 
   private def routes(tuiRoutes: TUIRoutes): Route =

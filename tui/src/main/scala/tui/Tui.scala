@@ -5,6 +5,7 @@ import model.modelComponents.Move
 import tui.api.service.CoreRequestHttp
 import util.Observer
 
+import scala.annotation.tailrec
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.io.StdIn.readLine
@@ -15,13 +16,13 @@ class Tui(using controller: ControllerInterface) extends Observer:
   controller.add(this)
   //println(controller.getGameField.toString)
 
-  def run: Unit =
+  def run(): Unit =
     update()
     inputLoop()
 
   override def update(): Unit = println(CoreRequestHttp.getGameField /*controller.getGameField.toString*/)
 
-  def inputLoop(): Unit =
+  private def inputLoop(): Unit =
     analyseInput(readLine())
     inputLoop()
 

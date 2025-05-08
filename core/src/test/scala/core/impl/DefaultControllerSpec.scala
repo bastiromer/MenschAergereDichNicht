@@ -155,7 +155,7 @@ class DefaultControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfte
     "load successfully" in {
       val source = "test.txt"
       sut.load(source) shouldBe Success(())
-      fileIO.loadCalls.last shouldBe("test.txt")
+      fileIO.loadCalls.last shouldBe "test.txt"
     }
 
 
