@@ -31,7 +31,7 @@ class ModelRoutes:
     }
   }
 
-  private def handlePossibleMoves: Route = get {
+  private def handlePossibleMoves: Route = post {
     path("possibleMoves") {
       entity(as[String]) { json =>
         val jsonValue: JsValue = Json.parse(json)
