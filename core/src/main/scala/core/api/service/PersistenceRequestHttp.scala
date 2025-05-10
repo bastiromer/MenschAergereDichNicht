@@ -26,7 +26,7 @@ object PersistenceRequestHttp:
     }
     
   def save(gameField: GameField, fileName: String): String =
-    val jsonField = Json.toJson(gameField).toString()
+    val jsonField = Json.toJson(gameField)
     Await.result(PersistenceClient.postRequest("api/persistence/fileIO/save", Json.obj(
       "fileName" -> fileName,
       "gameField" -> jsonField

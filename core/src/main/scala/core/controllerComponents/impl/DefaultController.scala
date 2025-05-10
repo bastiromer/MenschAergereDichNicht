@@ -7,6 +7,7 @@ import fileIO.fileIOComponents.FileIO
 import model.modelComponents.{GameField, Move, Token}
 import model.modelComponents.*
 
+import java.nio.file.NoSuchFileException
 import scala.util.{Failure, Success, Try}
 import concurrent.ExecutionContext.Implicits.global
 
@@ -72,11 +73,11 @@ class DefaultController(using fileIO: FileIO) extends ControllerInterface:
         undoManager.clear()
         notifyObservers()
       case Failure(exception) =>
-        throw RuntimeException("Cant load from fileIO " + exception.getMessage)
+        throw NoSuchFileException("Cant load target " + source + " from fileIO")
     }
   }
 
-  private def generateValidMoveList(move: Move): List[Move] = {
+  private[impl] def generateValidMoveList(move: Move): List[Move] = {
     ModelRequestHttp.toCell(gameField, move).token match
     //move.toCell(gameField.map).token match
       case Some(token: Token) => List(Move(

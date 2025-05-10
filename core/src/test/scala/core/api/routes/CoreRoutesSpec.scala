@@ -49,15 +49,14 @@ class CoreRoutesSpec extends AnyWordSpec with Matchers with ScalatestRouteTest w
       }
     }
 
-    /*
     "call makeMove on /makeMove" in {
-      val moveJson = Json.obj("move" -> Json.obj("x" -> 1, "y" -> 2)).toString()
+      val move = Move(1, 2)
+      val moveJson = Json.obj("move" -> move).toString()
       Post("/makeMove", HttpEntity(ContentTypes.`application/json`, moveJson)) ~> routes ~> check {
         status shouldBe StatusCodes.OK
-        verify(controller).makeMove(Move(1, 2)) // Passen je nach Move-Konstruktor
+        verify(controller).makeMove(Move(1, 2))
       }
     }
-     */
 
     "call undo on /undo" in {
       Post("/undo") ~> routes ~> check {
