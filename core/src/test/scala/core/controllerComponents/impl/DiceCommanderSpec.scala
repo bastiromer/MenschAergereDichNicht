@@ -8,8 +8,8 @@ import org.scalatest.matchers.should.Matchers.*
 class DiceCommanderSpec extends AnyWordSpec:
   var gameState: GameState = GameState(shouldDice = true, diceNumber = 2, currentPlayer = Player.Green)
   var commander = DiceCommander(gameState)
-  val gameField = GameField.init()
-  var newGameField = gameField
+  val gameField: GameField = GameField.init()
+  var newGameField: GameField = gameField
   
   "DiceCommander" should {
     "doStep" should  {
