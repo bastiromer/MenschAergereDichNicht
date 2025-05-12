@@ -1,15 +1,12 @@
 package menschaergerdichnicht
 
-import fileIO.FileIO
-import fileIO.impl.JsonFileIO
-import tui.Tui
-import controller.Controller
-import controller.impl.DefaultController
-
+import core.CoreService
+import fileIO.PersistenceService
+import model.ModelService
+import tui.TUIService
 
 @main def main(): Unit =
-  val fileIO: FileIO = JsonFileIO()
-  val controller: Controller = DefaultController(using fileIO)
-  val tui = Tui(using controller)
-
-  tui.inputLoop()
+  PersistenceService.startPersistenceServer()
+  ModelService.startModelServer()
+  CoreService.startCoreServer()
+  TUIService.startTUIServer()
