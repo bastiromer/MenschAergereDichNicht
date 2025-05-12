@@ -5,8 +5,6 @@ import akka.actor.{ActorSystem, CoordinatedShutdown}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.unmarshalling.Unmarshal
-import akka.stream.StreamTcpException
-import java.net.ConnectException
 import org.slf4j.LoggerFactory
 import play.api.libs.json.JsObject
 import scala.concurrent.{ExecutionContext, Future}
@@ -53,35 +51,6 @@ object CoreClient:
             Future.failed(new RuntimeException(errorMsg))
           }
     }
-    /*
-    http
-      .singleRequest(request)
-      .flatMap { response =>
-        Unmarshal(response.entity).to[String].map { body =>
-          response.status match
-            case StatusCodes.OK        => Right(body)
-            case StatusCodes.Forbidden => Left(body)
-            case _ =>
-              val errorMsg = s"HTTP ERROR: ${response.status} - ${request.uri} - $body"
-              logger.error(errorMsg)
-              throw new RuntimeException(errorMsg)
-        }
-      }
-      .recoverWith {
-        case exception: StreamTcpException if exception.getCause.isInstanceOf[ConnectException] =>
-          val msg = s"Connection error: Unable to reach ${request.uri}"
-          if (request.uri.toString.endsWith("/deregisterObserver")) then
-            val warnMsg = msg.concat(" (ignored for deregisterObserver) Probably the Core Server was shut down before.")
-            logger.warn(warnMsg)
-            Future.successful(Right(warnMsg))
-          else
-            logger.error(msg)
-            Future.failed(new RuntimeException(msg))
-        case exception =>
-          logger.error(s"Unexpected error: ${exception.getMessage}", exception)
-          Future.failed(exception)
-      }
-    */
 
   private def shutdown: Future[Done] =
     logger.info("TUI Service -- Shutting Down Core Client...")
