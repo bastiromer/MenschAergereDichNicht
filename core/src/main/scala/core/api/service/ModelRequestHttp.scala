@@ -7,7 +7,7 @@ import play.api.libs.json.Json
 import model.modelComponents.json.JsonWriters.given
 import model.modelComponents.json.JsonReaders.given
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -48,7 +48,6 @@ object ModelRequestHttp:
     
   def rollDice(gameField: GameField): GameField =
     val jsonField = Json.toJson(gameField)
-    //gameField.rollDice
     Await.result(ModelClient.postRequest("api/model/field/rollDice", Json.obj(
       "field" -> jsonField
     )).map { jsonString =>
