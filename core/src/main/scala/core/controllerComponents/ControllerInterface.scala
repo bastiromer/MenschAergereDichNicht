@@ -1,7 +1,7 @@
 package core.controllerComponents
 
+import core.controllerComponents.util.Observable
 import model.modelComponents.{GameField, Move}
-import util.Observable
 
 import scala.util.Try
 

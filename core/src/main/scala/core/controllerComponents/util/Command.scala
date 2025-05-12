@@ -1,4 +1,4 @@
-package util
+package core.controllerComponents.util
 
 trait Command[T]:
   def doStep(t: T): T

@@ -1,4 +1,4 @@
-package util
+package core.controllerComponents.util
 
 class UndoManager[T]:
   private var undoStack: List[Command[T]] = Nil
