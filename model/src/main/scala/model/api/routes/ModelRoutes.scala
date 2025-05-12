@@ -8,10 +8,12 @@ import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import model.modelComponents.*
 import model.modelComponents.json.JsonReaders.given
 import model.modelComponents.json.JsonWriters.given
+import org.slf4j.LoggerFactory
 import play.api.libs.json.{JsValue, Json}
 
 
 class ModelRoutes:
+  private val logger = LoggerFactory.getLogger(getClass.getName.init)
 
   def modelRoutes: Route = handleExceptions(exceptionHandler) {
     concat(
@@ -37,6 +39,7 @@ class ModelRoutes:
         val jsonValue: JsValue = Json.parse(json)
         val gameField: GameField = (jsonValue \ "field").as[GameField]
         val content = GameField(gameField.map, gameField.gameState).possibleMoves()
+        logger.info(s"Model Service [Model] -- Possible moves returned")
         complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, Json.toJson(content).toString)))
       }
     }
@@ -47,6 +50,7 @@ class ModelRoutes:
       entity(as[String]) { str =>
         val player = Player
         val target = player.fromString(str)
+        logger.info(s"Model Service [Model] -- fromString")
         complete(HttpResponse(
           status = StatusCodes.OK,
           entity = HttpEntity(ContentTypes.`application/json`, target.toString)
@@ -63,6 +67,7 @@ class ModelRoutes:
         val move: Move = (jsonValue \ "move").as[Move]
         val cell: Cell = move.toCell(gameField.map)
         val content = Json.toJson(cell)
+        logger.info(s"Model Service [Model] -- toCell")
         complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content.toString)))
       }
     }
@@ -72,7 +77,8 @@ class ModelRoutes:
     path("gameFieldinit") {
       val gameField: GameField = GameField.init()
       val content = Json.toJson(gameField)
-        complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content.toString)))
+      logger.info(s"Model Service [Model] -- init gameField")
+      complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content.toString)))
     }
   }
 
@@ -82,6 +88,7 @@ class ModelRoutes:
         val jsonValue: JsValue = Json.parse(json)
         val gameField: GameField = (jsonValue \ "field").as[GameField].rollDice
         val content = Json.toJson(gameField).toString()
+        logger.info(s"Model Service [Model] -- roll dice")
         complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content)))
       }
     }
@@ -94,6 +101,7 @@ class ModelRoutes:
         val move: Move = (jsonValue \ "move").as[Move]
         val gameField: GameField = (jsonValue \ "field").as[GameField]
         val content: GameField = gameField.move(move)
+        logger.info(s"Model Service [Model] -- handle move")
         complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, Json.toJson(content).toString)))
       }
     }

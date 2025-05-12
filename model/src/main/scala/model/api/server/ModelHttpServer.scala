@@ -19,7 +19,7 @@ object ModelHttpServer:
 
   def run: Future[ServerBinding] =
     val serverBinding = Http()
-      .newServerAt("localhost", 8081) //MODEL_HOST, MODEL_PORT)
+      .newServerAt("localhost", 8081)
       .bind(routes(new ModelRoutes))
 
     CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceStop, "shutdown-server") { () =>
@@ -27,7 +27,7 @@ object ModelHttpServer:
     }
 
     serverBinding.onComplete {
-      case Success(binding)   => logger.info(s"Model Service -- Http Server is running at 8081\n")  //$MODEL_BASE_URL
+      case Success(binding)   => logger.info(s"Model Service -- Http Server is running at 8081\n")
       case Failure(exception) => logger.error(s"Model Service -- Http Server failed to start", exception)
     }
     serverBinding
