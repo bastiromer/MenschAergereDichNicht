@@ -20,7 +20,7 @@ object PersistenceRequestHttp:
     
   def load(fileName: String): Future[GameField] =
     PersistenceClient.postRequest("api/persistence/fileIO/load", Json.obj(
-      "filename" -> fileName
+      "fileName" -> fileName
     )).map { jsonString =>
       Json.parse(jsonString).as[GameField]
     }
