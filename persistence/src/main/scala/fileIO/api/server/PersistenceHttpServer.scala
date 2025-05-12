@@ -19,7 +19,7 @@ object PersistenceHttpServer:
 
   def run: Future[ServerBinding] =
     val serverBinding = Http()
-      .newServerAt("localhost", 8080) // PERSISTENCE_HOST, PERSISTENCE_PORT)
+      .newServerAt("localhost", 8080)
       .bind(routes(new FileIORoutes))
 
     CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceStop, "shutdown-server") { () =>
@@ -27,7 +27,7 @@ object PersistenceHttpServer:
     }
 
     serverBinding.onComplete {
-      case Success(binding) => logger.info(s"Persistence Service -- Http Server is running at \n") //$PERSISTENCE_BASE_URL\n")
+      case Success(binding) => logger.info(s"Persistence Service -- Http Server is running at \n")
       case Failure(exception) => logger.error(s"Persistence Service -- Http Server failed to start", exception)
     }
     serverBinding
