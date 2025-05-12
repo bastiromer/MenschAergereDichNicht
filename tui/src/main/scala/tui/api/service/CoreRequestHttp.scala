@@ -34,13 +34,13 @@ object CoreRequestHttp:
     }
   
   def makeMove(move: Move): Future[String] = {
-    val jsonMove = Json.toJson(move).toString
+    val jsonMove = Json.toJson(move)
     CoreClient.postRequest("api/core/makeMove", Json.obj(
       "move" -> jsonMove
     ))
   }
 
-  def getTargets(): Future[List[String]] =
+  def getTargets: Future[List[String]] =
     CoreClient.getRequest("api/core/getTargets").map { json =>
       Json.parse(json).as[List[String]]
     }
@@ -54,5 +54,13 @@ object CoreRequestHttp:
     CoreClient.postRequest("api/core/load", Json.obj(
       "source" -> source
     ))
-  
 
+  def registerTUIObserver(tuiObserverUrl: String): Future[String] =
+    CoreClient.postRequest("api/core/registerObserver", Json.obj(
+      "url" -> tuiObserverUrl
+    ))
+
+  def deregisterTUIObserver(tuiObserverUrl: String): Future[String] =
+    CoreClient.postRequest("api/core/deregisterObserver", Json.obj(
+      "url" -> tuiObserverUrl
+    ))
