@@ -3,7 +3,7 @@ package menschaergerdichnicht
 import core.CoreService
 import fileIO.PersistenceService
 import model.ModelService
-import tui.api.TUIService
+import tui.TUIService
 
 @main def main(): Unit =
   PersistenceService.startPersistenceServer()
