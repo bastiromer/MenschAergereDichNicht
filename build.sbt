@@ -21,8 +21,8 @@ lazy val settings = Seq(
 
 
 lazy val root = (project in file("."))
-  .aggregate(model, util, persistence, core, tui)
-  .dependsOn(model, util, persistence, core, tui)
+  .aggregate(model, persistence, core, tui)
+  .dependsOn(model, persistence, core, tui)
   .enablePlugins(ScoverageSbtPlugin)
   .settings(
     name := "MenschAergerDichNicht",
@@ -30,7 +30,7 @@ lazy val root = (project in file("."))
   )
 
 lazy val core = (project in file("core"))
-  .dependsOn(model, util, persistence, persistence % "test->test")
+  .dependsOn(model, persistence, persistence % "test->test")
   .settings(
     name := "core",
     settings
@@ -44,7 +44,7 @@ lazy val model = (project in file("model"))
   )
 
 lazy val persistence = (project in file("persistence"))
-  .dependsOn(model, util)
+  .dependsOn(model)
   .settings(
     name := "persistence",
     settings
@@ -52,15 +52,9 @@ lazy val persistence = (project in file("persistence"))
 
 
 lazy val tui = (project in file("tui"))
-  .dependsOn(model, util, persistence, core)
+  .dependsOn(model, persistence, core)
   .settings(
     name := "tui",
     settings
   )
 
-lazy val util = (project in file("util"))
-  .dependsOn(model)
-  .settings(
-    name := "util",
-    settings
-  )
