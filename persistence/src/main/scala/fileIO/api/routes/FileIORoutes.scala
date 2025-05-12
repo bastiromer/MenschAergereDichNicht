@@ -59,15 +59,18 @@ class FileIORoutes:
         val filename: String = (jsonValue \ "fileName").as[String]
         val fullPath = s"$basePath/$filename.json"
         val file = new File(fullPath)
+        logger.info(s"Persistence Service [FileIO] -- load call: $filename")
 
         if file.exists() then {
           val content: String = Using(Source.fromFile(file)) { source =>
             source.mkString
           }.get
           Source.fromFile(file).close()
+          logger.info(s"Persistence Service [FileIO] -- Field successfully loaded from $filename")
           complete(HttpResponse(StatusCodes.OK, entity = HttpEntity(ContentTypes.`application/json`, content)))
         } else {
           val json = Json.obj("status" -> "error", "message" -> "File not found")
+          logger.error(s"Persistence Service [FileIO] -- Failed to load Field from $filename")
           complete(StatusCodes.InternalServerError)
         }
       }
@@ -77,6 +80,7 @@ class FileIORoutes:
     path("getTargets") {
       val targets = fileIO.getTargets
       val json = Json.toJson(targets)
+      logger.info(s"Persistence Service [FileIO] -- Targets successfully loaded")
       complete(HttpResponse(
         status = StatusCodes.OK,
         entity = HttpEntity(ContentTypes.`application/json`, json.toString())
