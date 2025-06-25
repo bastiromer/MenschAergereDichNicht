@@ -12,7 +12,6 @@ import io.gatling.javaapi.core.PopulationBuilder
 class ControllerLoadTest extends SimulationTemplate {
   override val operations: List[ChainBuilder] = List(
     buildOperation("API root", "GET", "/", StringBody("")),
-    buildOperation("GameField", "GET", "/core/gameField", StringBody("")),
   )
 
   override def executeOperations(): Unit = {
