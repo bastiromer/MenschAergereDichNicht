@@ -35,7 +35,6 @@ class RestCoreAPI:
       <h1>Welcome to the REST Core API service!</h1>
       <h2>Available routes:</h2>
 
-      <p><a href="/core/gameField">GET           ->     core/gameField</a></p>
       <p><a href="/core/possibleMoves">GET       ->     core/possibleMoves</a></p>
       <p><a href="/core/getTargets">GET          ->     core/getTargets</a></p>
       <p><a href="/core/move">POST               ->     core/move</a></p>
@@ -52,11 +51,6 @@ class RestCoreAPI:
     concat(
       pathSingleSlash {
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, routes))
-      },
-      get {
-        path("core" / "gameField") {
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, Json.toJson(controller.getGameField).toString()))
-        }
       },
       get {
         path("core" / "possibleMoves") {
@@ -181,7 +175,9 @@ class RestCoreAPI:
         .mapMaterializedValue { queue =>
           controller.add(new Observer {
             override def update(): Unit = {
-              val message = TextMessage.Strict("Notify")
+              val message = TextMessage.Strict(
+                Json.toJson(controller.getGameField).toString()
+              )
               queue.offer(message)
             }
           })
