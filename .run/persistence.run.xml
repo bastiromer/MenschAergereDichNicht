@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="persistence" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="persistence" />
+    <module name="ToyBrokersLudo.Persistence" />
+    <projectPathOnTarget name="projectPathOnTarget" value="/app" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

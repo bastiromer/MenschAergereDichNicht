@@ -1,60 +1,111 @@
-ThisBuild / version := "0.1.0-SNAPSHOT"
+import com.typesafe.sbt.packager.Keys.{dockerBaseImage, dockerExposedPorts}
 
-ThisBuild / scalaVersion := "3.6.4"
+val scala3Version = "3.1.2"
+val scalacticVersion = "3.2.17"
+val scalatestVersion = "3.2.17"
+val scalaSwingVersion = "3.0.0"
+val playJsonVersion = "2.10.4"
+val akkaHttp = "10.5.0"
+val akkaActor = "2.8.0"
 
+ThisBuild / version := "1.0"
+ThisBuild / scalaVersion := "3.1.2"
+ThisBuild / versionScheme := Some("early-semver")
+ThisBuild / fork := true
 
-lazy val settings = Seq(
-  libraryDependencies ++= Seq(
-    "org.playframework" %% "play-json" % "3.0.4",
-    "org.scalatest" %% "scalatest" % "3.2.19" % Test,
-    "org.scalactic" %% "scalactic" % "3.2.19",
-    "com.typesafe.akka" %% "akka-http" % "10.5.3",
-    "com.typesafe.akka" %% "akka-stream" % "2.8.8",
-    "com.typesafe.akka" %% "akka-actor-typed" % "2.8.8",
-    "ch.qos.logback" % "logback-classic" % "1.5.18",
-    "org.playframework" %% "play-json" % "3.0.4",
-    "com.typesafe.akka" %% "akka-stream-testkit" % "2.8.8" % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % "10.5.3" % Test,
-    "org.mockito" % "mockito-core" % "5.17.0" % Test,
-  )
-)
+updateOptions := updateOptions.value.withCachedResolution(false)
 
-
-lazy val root = (project in file("."))
-  .aggregate(model, persistence, core, tui)
-  .dependsOn(model, persistence, core, tui)
-  .enablePlugins(ScoverageSbtPlugin)
+lazy val root = project
+  .in(file("."))
+  .dependsOn(model, tools, persistence, core, ui)
   .settings(
-    name := "MenschAergerDichNicht",
-    settings
+    name := "ToyBrokersLudo",
+    commonSettings,
+    coverage,
   )
+  .aggregate(ui, core, model, persistence, tools)
+  .enablePlugins(JacocoCoverallsPlugin)
 
-lazy val core = (project in file("core"))
-  .dependsOn(model, persistence, persistence % "test->test")
+lazy val ui = project
+  .in(file("UI"))
+  .dependsOn(model, tools)
   .settings(
-    name := "core",
-    settings
-  )
+    name := "UI",
+    version:="0.1.0-SNAPSHOT",
+    dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
+    dockerExposedPorts := Seq(8090),
+    commonSettings,
+  ).enablePlugins(JavaAppPackaging)
 
-
-lazy val model = (project in file("model"))
+lazy val core = project
+  .in(file("Core"))
+  .dependsOn(model, tools)
   .settings(
-    name := "model",
-    settings
-  )
+    name := "Core",
+    version:="0.1.0-SNAPSHOT",
+    dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
+    dockerExposedPorts := Seq(8082),
+    commonSettings,
+  ).enablePlugins(JavaAppPackaging)
 
-lazy val persistence = (project in file("persistence"))
+lazy val persistence = project
+  .in(file("Persistence"))
+  .dependsOn(model, tools)
+  .settings(
+    name := "Persistence",
+    version:="0.1.0-SNAPSHOT",
+    dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
+    dockerExposedPorts := Seq(8081),
+    commonSettings,
+  ).enablePlugins(JavaAppPackaging)
+
+lazy val tools = project
+  .in(file("Tools"))
   .dependsOn(model)
   .settings(
-    name := "persistence",
-    settings
+    name := "Tools",
+    commonSettings
   )
 
-
-lazy val tui = (project in file("tui"))
-  .dependsOn(model, persistence, core)
+lazy val model = project
+  .in(file("Model"))
   .settings(
-    name := "tui",
-    settings
+    name := "Model",
+    commonSettings
   )
 
+lazy val commonSettings: Seq[Def.Setting[?]] = Seq(
+  scalaVersion := scala3Version,
+  javacOptions ++= Seq("-encoding", "UTF-8"),
+  libraryDependencies ++= Seq(
+    "org.scalactic" %% "scalactic" % scalacticVersion,
+    "org.scalatest" %% "scalatest" % scalatestVersion % "test",
+    "org.scala-lang.modules" %% "scala-swing" % scalaSwingVersion cross CrossVersion.for3Use2_13,
+    "com.typesafe.play" %% "play-json" % playJsonVersion cross CrossVersion.for3Use2_13,
+    "com.typesafe.akka" %% "akka-http" % akkaHttp,
+    "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttp,
+    "com.typesafe.akka" %% "akka-http-core" % akkaHttp,
+    "com.typesafe.akka" %% "akka-actor-typed" % akkaActor,
+    "com.typesafe.akka" %% "akka-stream" % akkaActor,
+    "com.typesafe.akka" %% "akka-actor" % akkaActor,
+    "org.slf4j" % "slf4j-nop" % "2.0.5"
+  ),
+)
+
+lazy val coverage: Seq[Def.Setting[?]] = Seq(
+  jacocoReportSettings := JacocoReportSettings(
+    "Jacoco Coverage Report",
+    None,
+    JacocoThresholds(),
+    Seq(JacocoReportFormats.ScalaHTML, JacocoReportFormats.XML),
+    "utf-8"
+  ),
+  jacocoExcludes := Seq(
+    "de.htwg.se.mill.Mill*",
+    "de.htwg.se.mill.util*"
+  ),
+  jacocoCoverallsServiceName := "github-actions",
+  jacocoCoverallsBranch := sys.env.get("CI_BRANCH"),
+  jacocoCoverallsPullRequest := sys.env.get("GITHUB_EVENT_NAME"),
+  jacocoCoverallsRepoToken := sys.env.get("COVERALLS_REPO_TOKEN")
+)
