@@ -8,20 +8,46 @@ import akka.http.scaladsl.model.*
 import akka.http.scaladsl.model.headers.RawHeader
 import akka.http.scaladsl.model.ws.{Message, TextMessage, WebSocketRequest}
 import akka.http.scaladsl.unmarshalling.Unmarshal
+import akka.kafka.scaladsl.Consumer
+import akka.kafka.{ConsumerSettings, Subscriptions}
 import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import model.kafka.Topics
 import model.{GameField, Move}
+import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord, KafkaConsumer}
+import org.apache.kafka.common.serialization.StringDeserializer
 import play.api.libs.json.Json
 import util.json.JsonReaders.*
 import util.json.JsonWriters.*
 import util.{Observable, establishWebSocketConnection, handleResponse, sendHttpRequest}
 
-import scala.concurrent.{ExecutionContextExecutor, Future}
+import java.util.Properties
+import java.util.concurrent.Executors
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success}
 
-class CoreController extends Observable:
+class CoreController:
   implicit val system: ActorSystem[Any] = ActorSystem(Behaviors.empty, "CoreController")
   implicit val executionContext: ExecutionContextExecutor = system.executionContext
+
+  private val topic = Topics.GameTopic
+
+  private val consumerSettings = ConsumerSettings(system, new StringDeserializer, new StringDeserializer)
+    .withBootstrapServers("kafka1:9092")
+    .withGroupId("KafkaCoreController")
+    .withProperty(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, "KafkaCoreController-id")
+
+
+  private val source = Consumer.plainSource(
+    consumerSettings,
+    Subscriptions.topics(topic.toString)
+  )
+
+  private val gameFieldSink = Sink.foreach[ConsumerRecord[String, String]] { record =>
+    gameFieldQueue.offer(Json.parse(record.value()).as[GameField])
+  }
+
+  source.to(gameFieldSink).run()
 
   private val (gameFieldQueue, gameFieldSource) =
     Source.queue[GameField](
@@ -29,19 +55,8 @@ class CoreController extends Observable:
       overflowStrategy = OverflowStrategy.dropHead
     ).preMaterialize()
 
-  private val wsUrl = "ws://core-service:8082/core/changes"
-  private val messageHandler: Message => Unit = {
-    case message: TextMessage.Strict =>
-      val text = message.text
-      gameFieldQueue.offer(Json.parse(text).as[GameField])
-    case _ =>
-      println("Received non-strict message")
-  }
-
-  establishWebSocketConnection(wsUrl, messageHandler)
-
   def gameFieldStream(): Source[GameField, NotUsed] = gameFieldSource
-  
+
   def possibleMoves: Future[List[Move]] =
     val request = HttpRequest(uri = "http://core-service:8082/core/possibleMoves")
     sendHttpRequest(request).flatMap { response =>
@@ -106,7 +121,7 @@ class CoreController extends Observable:
     sendHttpRequest(request).map { response =>
       handleResponse(response)(jsonStr => Json.parse(jsonStr))
     }
-    
+
   def newGame(): Future[Unit] =
     val request = HttpRequest(
       method = HttpMethods.POST,
@@ -116,7 +131,7 @@ class CoreController extends Observable:
     sendHttpRequest(request).map { response =>
       handleResponse(response)(jsonStr => Json.parse(jsonStr))
     }
-  
+
   def getTargets: Future[List[String]] =
     val request = HttpRequest(uri = "http://core-service:8082/core/getTargets")
     sendHttpRequest(request).flatMap { response =>
