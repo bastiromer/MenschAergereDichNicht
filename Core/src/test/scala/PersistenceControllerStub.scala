@@ -1,8 +1,8 @@
 import controller.PersistenceControllerInterface
 import model.GameField
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import concurrent.ExecutionContext.Implicits.global
 
 class PersistenceControllerStub extends PersistenceControllerInterface:
   var saveCalls: List[(GameField, String)] = List()
