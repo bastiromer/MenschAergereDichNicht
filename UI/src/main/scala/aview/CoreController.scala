@@ -122,32 +122,3 @@ class CoreController extends Observable:
     sendHttpRequest(request).flatMap { response =>
       handleResponse(response)(jsonStr => Json.parse(jsonStr).as[List[String]])
     }
-
-  private def establishWebSocketConnection(): Future[Unit] = {
-    val wsUrl = "ws://core-service:8082/core/changes"
-
-    val (webSocketUpgradeResponse, webSocketOut) =
-      Http().singleWebSocketRequest(
-        WebSocketRequest(uri = wsUrl),
-        Flow.fromSinkAndSourceMat(
-          Sink.foreach[Message] {
-            _ => notifyObservers()
-          },
-          Source.actorRef[TextMessage](bufferSize = 10, OverflowStrategy.fail)
-            .mapMaterializedValue { webSocketIn =>
-              system.log.info("WebSocket connected")
-              webSocketIn
-            }
-        )(Keep.both)
-      )
-
-    webSocketUpgradeResponse.flatMap { upgrade =>
-      if (upgrade.response.status == StatusCodes.SwitchingProtocols) {
-        println("WebSocket connection established")
-        Future.successful(())
-      } else {
-        println(s"WebSocket connection failed: ${upgrade.response.status}")
-        throw new RuntimeException(s"WebSocket connection failed: ${upgrade.response.status}")
-      }
-    }
-  }
