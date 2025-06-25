@@ -1,7 +1,7 @@
 import com.typesafe.sbt.packager.Keys.{dockerBaseImage, dockerExposedPorts}
 import sbt.librarymanagement.InclExclRule
 
-val scala3Version = "3.1.2"
+val scala3Version = "3.2.2"
 val scalacticVersion = "3.2.17"
 val scalatestVersion = "3.2.17"
 val scalaSwingVersion = "3.0.0"
@@ -11,9 +11,10 @@ val akkaActorVersion = "2.8.0"
 val slickVersion = "3.5.0-M3"
 val postgresqlVersion = "42.5.4"
 val mongoVersion = "4.8.0"
+val kafkaClientsVersion = "3.4.0"
 
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "3.1.2"
+ThisBuild / scalaVersion := "3.2.2"
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / fork := true
 
@@ -35,7 +36,7 @@ lazy val ui = project
   .dependsOn(model, tools)
   .settings(
     name := "UI",
-    version:="0.1.0-SNAPSHOT",
+    version := "0.1.0-SNAPSHOT",
     dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
     dockerExposedPorts := Seq(8090),
     commonSettings,
@@ -46,7 +47,7 @@ lazy val core = project
   .dependsOn(model, tools)
   .settings(
     name := "Core",
-    version:="0.1.0-SNAPSHOT",
+    version := "0.1.0-SNAPSHOT",
     dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
     dockerExposedPorts := Seq(8082),
     commonSettings,
@@ -57,7 +58,7 @@ lazy val persistence = project
   .dependsOn(model, tools)
   .settings(
     name := "Persistence",
-    version:="0.1.0-SNAPSHOT",
+    version := "0.1.0-SNAPSHOT",
     dockerBaseImage := "adoptopenjdk:11-jre-hotspot",
     dockerExposedPorts := Seq(8081),
     commonSettings,
@@ -78,7 +79,11 @@ lazy val model = project
     commonSettings
   )
 
-val gatlingExclude = Seq(("com.typesafe.akka", "akka-actor_2.13"), ("org.scala-lang.modules", "scala-java8-compat_2.13"), ("com.typesafe.akka","akka-slf4j_2.13")).toVector.map((org_name: Tuple2[String,String]) => InclExclRule(org_name._1, org_name._2))
+val gatlingExclude = Seq(
+  ("com.typesafe.akka", "akka-actor_2.13"),
+  ("org.scala-lang.modules", "scala-java8-compat_2.13"),
+  ("com.typesafe.akka","akka-slf4j_2.13")
+).toVector.map((org_name: Tuple2[String,String]) => InclExclRule(org_name._1, org_name._2))
 
 lazy val commonSettings: Seq[Def.Setting[?]] = Seq(
   scalaVersion := scala3Version,
@@ -97,8 +102,10 @@ lazy val commonSettings: Seq[Def.Setting[?]] = Seq(
     "com.typesafe.slick" %% "slick" % slickVersion cross CrossVersion.for3Use2_13,
     "org.postgresql" % "postgresql" % postgresqlVersion,
     "org.mongodb.scala" %% "mongo-scala-driver" % mongoVersion cross CrossVersion.for3Use2_13,
+    "org.apache.kafka" % "kafka-clients" % kafkaClientsVersion,
     ("io.gatling.highcharts" % "gatling-charts-highcharts" % "3.9.5" % "test").withExclusions(gatlingExclude),
-    ("io.gatling" % "gatling-test-framework" % "3.9.5" % "test").withExclusions(gatlingExclude)
+    ("io.gatling" % "gatling-test-framework" % "3.9.5" % "test").withExclusions(gatlingExclude),
+    "com.typesafe.akka" %% "akka-stream-kafka" % "4.0.2",
   ))
 
 lazy val coverage: Seq[Def.Setting[?]] = Seq(
