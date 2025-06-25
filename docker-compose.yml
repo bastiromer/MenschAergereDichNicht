@@ -2,9 +2,46 @@ version: "3.9"
 
 services:
 
+  zoo1:
+    image: confluentinc/cp-zookeeper:7.3.2
+    hostname: zoo1
+    container_name: zoo1
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zoo1:2888:3888
+    networks:
+      - my_network
+
+  kafka1:
+    image: confluentinc/cp-kafka:7.3.2
+    hostname: kafka1
+    container_name: kafka1
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+      - "9999:9999"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,DOCKER://host.docker.internal:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,DOCKER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+    depends_on:
+      - zoo1
+    networks:
+      - my_network
+
   db:
     image: postgres
-    restart: always
     container_name: database
     environment:
       POSTGRES_PASSWORD: postgres
@@ -19,7 +56,6 @@ services:
 
   mongoDB:
     image: mongo
-    restart: always
     container_name: mongo
     ports:
       - "27017:27017"
@@ -29,7 +65,6 @@ services:
       MONGO_INITDB_DATABASE: tbl
     networks:
       - my_network
-
 
   persistence:
     image: persistence:0.1.0-SNAPSHOT
@@ -43,7 +78,7 @@ services:
       - my_network
     working_dir: /fileio
     volumes:
-        - ./:/fileio:xro
+      - ./:/fileio:xro
 
   core:
     image: core:0.1.0-SNAPSHOT
@@ -60,18 +95,6 @@ services:
     stdin_open: true
     tty: true
     container_name: ui-service
-    depends_on:
-      - core
-    networks:
-      - my_network
-    environment:
-      DISPLAY: $DISPLAY
-
-  ui2:
-    image: ui:0.1.0-SNAPSHOT
-    stdin_open: true
-    tty: true
-    container_name: ui-service2
     depends_on:
       - core
     networks:
