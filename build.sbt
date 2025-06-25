@@ -88,7 +88,8 @@ lazy val commonSettings: Seq[Def.Setting[?]] = Seq(
     "com.typesafe.akka" %% "akka-actor-typed" % akkaActor,
     "com.typesafe.akka" %% "akka-stream" % akkaActor,
     "com.typesafe.akka" %% "akka-actor" % akkaActor,
-    "org.slf4j" % "slf4j-nop" % "2.0.5"
+    ("com.typesafe.slick" %% "slick" % "3.5.0-M3").cross(CrossVersion.for3Use2_13),
+    "org.postgresql" % "postgresql" % "42.5.4",
   ),
 )
 
