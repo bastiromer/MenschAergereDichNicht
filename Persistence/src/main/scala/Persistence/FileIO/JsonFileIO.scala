@@ -14,31 +14,40 @@ import scala.io.Source
 
 case class JsonFileIO() extends FileIO:
   private val path = "Persistence/saveGameJson"
+  private val fileLock = new Object
+
   override def save(gameField: GameField, target: String): Unit =
-    createFolderIfNotExists()
-    val pw = new PrintWriter(new File(path + "/" + target + ".json"))
-    val json = Json.toJson(gameField)
-    pw.write(Json.stringify(json))
-    pw.close()
+    fileLock.synchronized {
+      createFolderIfNotExists()
+      val pw = new PrintWriter(new File(path + "/" + target + ".json"))
+      val json = Json.toJson(gameField)
+      pw.write(Json.stringify(json))
+      pw.close()
+    }
 
   def load(source: String): GameField =
-    createFolderIfNotExists()
-    val filePath: String = path + "/" + source + ".json"
-    if (!Files.exists(Paths.get(filePath))) {
-      throw new FileNotFoundException("File not found: " + filePath)
+    fileLock.synchronized {
+      createFolderIfNotExists()
+      val filePath: String = path + "/" + source + ".json"
+      if (!Files.exists(Paths.get(filePath))) {
+        throw new FileNotFoundException("File not found: " + filePath)
+      }
+      val file = Source.fromFile(filePath)
+      try {
+        Json.fromJson(Json.parse(file.mkString)).get
+      } finally {
+        file.close()
+      }
     }
-    val file = Source.fromFile(filePath)
-    Json.fromJson(Json.parse(file.mkString)).get
 
   override def getTargets: List[String] =
     createFolderIfNotExists()
     val files: List[File] = File(path).listFiles().toList
     files.map(file => file.toString.replaceAll(".json", "").replaceAll(path + "/", ""))
 
-  def createFolderIfNotExists(): Unit = {
+  private def createFolderIfNotExists(): Unit = {
     val folder = new File(path)
     if (!folder.exists()) {
       Files.createDirectories(Paths.get(path))
     }
   }
-

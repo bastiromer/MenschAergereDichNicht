@@ -34,24 +34,32 @@ class Mongo extends DAOInterface:
   private val gameCollection: MongoCollection[Document] = db.getCollection("game")
 
   def save(gameField: GameField): Unit =
-    val document = Document(
-      "_id" -> (getHighestId(gameCollection) + 1),
-      "state" -> Document(
-        "shouldDice" -> gameField.gameState.shouldDice,
-        "diceNumber" -> gameField.gameState.diceNumber,
-        "currentPlayer" -> gameField.gameState.currentPlayer.toString
-      ),
-      "map" -> Json.toJson(gameField).toString()
-    )
-    handleResult(gameCollection.insertOne(document))
+    try {
+      val document = Document(
+        "_id" -> (getHighestId(gameCollection) + 1),
+        "state" -> Document(
+          "shouldDice" -> gameField.gameState.shouldDice,
+          "diceNumber" -> gameField.gameState.diceNumber,
+          "currentPlayer" -> gameField.gameState.currentPlayer.toString
+        ),
+        "map" -> Json.toJson(gameField).toString()
+      )
+      handleResult(gameCollection.insertOne(document))
+    } catch
+      case ex: Exception => println(ex)
+
 
   def load(): GameField =
-    val filter = equal("_id", getHighestId(gameCollection))
-    val future = gameCollection.find(filter).first().toFutureOption()
-    val gameDocument = Await.result(future, 10.seconds)
-    val map = Json.parse(gameDocument.get("map").asString().getValue).as[GameField].map
-    val state = queryState(gameDocument.get("state"))
-    GameField.init().copy(map = map, gameState = state)
+    try {
+      val filter = equal("_id", getHighestId(gameCollection))
+      val future = gameCollection.find(filter).first().toFutureOption()
+      val gameDocument = Await.result(future, 10.seconds)
+      val map = Json.parse(gameDocument.get("map").asString().getValue).as[GameField].map
+      val state = queryState(gameDocument.get("state"))
+      GameField.init().copy(map = map, gameState = state)
+    } catch
+      case ex: Exception =>
+        GameField.init()
 
   def update(gameField: GameField): Unit = {
     val filter = equal("_id", getHighestId(gameCollection))
