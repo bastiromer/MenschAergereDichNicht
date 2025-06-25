@@ -1,18 +1,18 @@
 package gatling
 
-import scala.concurrent.duration.*
+import akka.http.javadsl.Http
+import akka.http.javadsl.model.HttpMethod
 import io.gatling.core.Predef.*
+import io.gatling.core.action.builder.ActionBuilder
+import io.gatling.core.body.Body
+import io.gatling.core.structure.{ChainBuilder, PopulationBuilder, ScenarioBuilder}
 import io.gatling.http.Predef.*
+import io.gatling.http.protocol.HttpProtocolBuilder
+import io.gatling.http.request.builder.HttpRequestBuilder
 import io.gatling.jdbc.Predef.*
 
+import scala.concurrent.duration.*
 import scala.util.Random
-import io.gatling.core.action.builder.ActionBuilder
-import io.gatling.http.request.builder.HttpRequestBuilder
-import akka.http.javadsl.Http
-import io.gatling.core.structure.{ChainBuilder, PopulationBuilder, ScenarioBuilder}
-import io.gatling.core.body.Body
-import akka.http.javadsl.model.HttpMethod
-import io.gatling.http.protocol.HttpProtocolBuilder
 
 abstract class SimulationTemplate extends Simulation {
 
