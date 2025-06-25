@@ -200,4 +200,23 @@ class DefaultControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfte
       sut.gameField = gameField
       sut.possibleMoves shouldBe Success(gameField.possibleMoves())
     }
+
+    "deleteGame" in {
+      var gameField = GameField.init().copy(gameState = GameField.init().gameState.copy(shouldDice = false))
+      gameField = gameField.move(Move(4, 74))
+      sut.gameField = gameField
+      sut.deleteGame()
+      Thread.sleep(100)
+      val expected = "G1G2OOOR1R2OOOG3G4OOOR3R4OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOY1Y2OOOB1B2OOOY3Y4OOOB3B4Dice:0Greenhavetodice"
+      val actual = GameField.init().toString
+    }
+    
+    "init controller should read from database" in {
+      persistenceControllerStub.loadDatabaseCalls shouldBe 1
+    }
+    
+    "dice should write to database" in {
+      sut.dice()
+      persistenceControllerStub.updateDatabaseCalls.length shouldBe 1
+    }
   }}
