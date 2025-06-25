@@ -17,6 +17,20 @@ services:
     networks:
       - my_network
 
+  mongoDB:
+    image: mongo
+    restart: always
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: tbl
+    networks:
+      - my_network
+
+
   persistence:
     image: persistence:0.1.0-SNAPSHOT
     ports:
@@ -24,6 +38,7 @@ services:
     container_name: persistence-service
     depends_on:
       - db
+      - mongoDB
     networks:
       - my_network
     working_dir: /fileio
