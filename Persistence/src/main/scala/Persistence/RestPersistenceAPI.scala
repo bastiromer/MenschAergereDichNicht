@@ -63,6 +63,7 @@ class RestPersistenceAPI(using fileIO: FileIO)(using database: DAOInterface):
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, Json.toJson(game).toString()))
             } catch
               case ex: Exception =>
+                ex.printStackTrace()
                 complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
           }
         }
@@ -82,7 +83,9 @@ class RestPersistenceAPI(using fileIO: FileIO)(using database: DAOInterface):
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Game saved"))
             }
           } catch
-            case ex: Exception => complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
+            case ex: Exception =>
+              ex.printStackTrace()
+              complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
         }
       },
       get {
@@ -91,7 +94,9 @@ class RestPersistenceAPI(using fileIO: FileIO)(using database: DAOInterface):
             val game = database.load()
             complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, Json.toJson(game).toString()))
           } catch
-            case ex: Exception => complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
+            case ex: Exception =>
+              ex.printStackTrace()
+              complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
           }
       },
       path("persistence" / "databaseUpdate") {
@@ -109,7 +114,9 @@ class RestPersistenceAPI(using fileIO: FileIO)(using database: DAOInterface):
             database.delete()
             complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "Game deleted"))
           } catch
-            case ex: Exception => complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
+            case ex: Exception =>
+              ex.printStackTrace()
+              complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
         }
       }
     )
@@ -121,5 +128,6 @@ class RestPersistenceAPI(using fileIO: FileIO)(using database: DAOInterface):
       case Success(binding) =>
         println(s"PersistenceAPI service online at http://localhost:$RestUIPort/")
       case Failure(exception) =>
+        exception.printStackTrace()
         println(s"PersistenceAPI service failed to start: ${exception.getMessage}")
     }
