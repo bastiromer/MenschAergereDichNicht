@@ -93,7 +93,17 @@ class CoreController extends Observable:
     sendHttpRequest(request).map { response =>
       handleResponse(response)(jsonStr => Json.parse(jsonStr))
     }
-
+    
+  def newGame(): Future[Unit] =
+    val request = HttpRequest(
+      method = HttpMethods.POST,
+      uri = s"http://core-service:8082/core/newGame",
+      entity = HttpEntity(ContentTypes.`application/json`, "")
+    )
+    sendHttpRequest(request).map { response =>
+      handleResponse(response)(jsonStr => Json.parse(jsonStr))
+    }
+  
   def getTargets: Future[List[String]] =
     val request = HttpRequest(uri = "http://core-service:8082/core/getTargets")
     sendHttpRequest(request).flatMap { response =>

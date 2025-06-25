@@ -42,6 +42,7 @@ class Tui(coreController: CoreController) extends Observer:
       case "move" => findMoves()
       case "load" => load()
       case "save" => save()
+      case "newGame" => doAction(coreController.newGame)
       case _ => println(input + " is not a valid command")
 
 
