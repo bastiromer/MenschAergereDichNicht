@@ -2,8 +2,8 @@ package controller.impl
 
 import controller.PersistenceControllerInterface
 import controller.impl.PersistenceController
-import model.Player.{Blue, Green, Red, Yellow}
 import model.*
+import model.Player.{Blue, Green, Red, Yellow}
 import util.{Observable, UndoManager}
 
 import scala.concurrent.ExecutionContext.Implicits.global

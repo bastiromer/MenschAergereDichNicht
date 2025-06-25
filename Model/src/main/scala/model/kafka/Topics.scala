@@ -1,6 +1,5 @@
 package model.kafka
 
-
 object Topics {
   
   object GameTopic {

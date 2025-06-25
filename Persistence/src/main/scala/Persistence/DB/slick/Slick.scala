@@ -22,12 +22,10 @@ class Slick extends DAOInterface:
   private val databaseUser: String = sys.env.getOrElse("MYSQL_USER", "postgres")
   private val databasePassword: String = sys.env.getOrElse("MYSQL_PASSWORD", "postgres")
   private val databasePort: String = sys.env.getOrElse("MYSQL_PORT", "5432")
-  //private val databaseHost: String = sys.env.getOrElse("MYSQL_HOST", "localhost")
   private val databaseHost: String = sys.env.getOrElse("MYSQL_HOST", "database")
   private val databaseUrl = s"jdbc:postgresql://$databaseHost:$databasePort/$databaseDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&autoReconnect=true"
 
   private val WAIT_TIME = 5.seconds
-
 
   val database = Database.forURL(
     url = databaseUrl,
@@ -108,8 +106,3 @@ class Slick extends DAOInterface:
     val gameFieldDelete = gameFieldTable.delete
     database.run(gameFieldDelete)
     println("Database deleted")
-
-
-
-
-

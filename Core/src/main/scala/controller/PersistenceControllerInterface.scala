@@ -1,7 +1,5 @@
 package controller
 
-
-
 import model.GameField
 
 import scala.concurrent.Future

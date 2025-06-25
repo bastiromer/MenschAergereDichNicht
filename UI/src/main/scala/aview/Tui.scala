@@ -12,7 +12,6 @@ import scala.concurrent.{Await, Future}
 import scala.io.StdIn.readLine
 import scala.util.{Failure, Success}
 
-
 class Tui(coreController: CoreController):
   implicit val system: ActorSystem[Any] = ActorSystem(Behaviors.empty, "CoreController")
 
