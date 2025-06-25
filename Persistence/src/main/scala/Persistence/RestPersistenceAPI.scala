@@ -1,7 +1,8 @@
 package Persistence
 
-import FileIO.JsonFileIO
-import Persistence.DB.Slick
+import Persistence.DB.DAOInterface
+import Persistence.DB.slick.Slick
+import Persistence.FileIO.{FileIO, JsonFileIO}
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
@@ -16,12 +17,10 @@ import util.json.JsonWriters.*
 import scala.concurrent.ExecutionContextExecutor
 import scala.util.{Failure, Success}
 
-class RestPersistenceAPI:
+class RestPersistenceAPI(using fileIO: FileIO)(using database: DAOInterface):
   implicit val system: ActorSystem[Nothing] = ActorSystem(Behaviors.empty, "RestPersistenceAPI")
   implicit val executionContext: ExecutionContextExecutor = system.executionContext
-
-  var fileIO = new JsonFileIO
-  var database = new Slick()
+  
   private val RestUIPort = 8081
   private val routes: String =
     """

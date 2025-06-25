@@ -5,8 +5,11 @@ val scalacticVersion = "3.2.17"
 val scalatestVersion = "3.2.17"
 val scalaSwingVersion = "3.0.0"
 val playJsonVersion = "2.10.4"
-val akkaHttp = "10.5.0"
-val akkaActor = "2.8.0"
+val akkaHttpVersion = "10.5.0"
+val akkaActorVersion = "2.8.0"
+val slickVersion = "3.5.0-M3"
+val postgresqlVersion = "42.5.4"
+val mongoVersion = "4.8.0"
 
 ThisBuild / version := "1.0"
 ThisBuild / scalaVersion := "3.1.2"
@@ -82,14 +85,15 @@ lazy val commonSettings: Seq[Def.Setting[?]] = Seq(
     "org.scalatest" %% "scalatest" % scalatestVersion % "test",
     "org.scala-lang.modules" %% "scala-swing" % scalaSwingVersion cross CrossVersion.for3Use2_13,
     "com.typesafe.play" %% "play-json" % playJsonVersion cross CrossVersion.for3Use2_13,
-    "com.typesafe.akka" %% "akka-http" % akkaHttp,
-    "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttp,
-    "com.typesafe.akka" %% "akka-http-core" % akkaHttp,
-    "com.typesafe.akka" %% "akka-actor-typed" % akkaActor,
-    "com.typesafe.akka" %% "akka-stream" % akkaActor,
-    "com.typesafe.akka" %% "akka-actor" % akkaActor,
-    ("com.typesafe.slick" %% "slick" % "3.5.0-M3").cross(CrossVersion.for3Use2_13),
-    "org.postgresql" % "postgresql" % "42.5.4",
+    "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+    "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
+    "com.typesafe.akka" %% "akka-http-core" % akkaHttpVersion,
+    "com.typesafe.akka" %% "akka-actor-typed" % akkaActorVersion,
+    "com.typesafe.akka" %% "akka-stream" % akkaActorVersion,
+    "com.typesafe.akka" %% "akka-actor" % akkaActorVersion,
+    "com.typesafe.slick" %% "slick" % slickVersion cross CrossVersion.for3Use2_13,
+    "org.postgresql" % "postgresql" % postgresqlVersion,
+    "org.mongodb.scala" %% "mongo-scala-driver" % mongoVersion cross CrossVersion.for3Use2_13
   ),
 )
 
