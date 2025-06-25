@@ -1,5 +1,6 @@
 package aview
 
+import akka.NotUsed
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
@@ -13,22 +14,34 @@ import model.{GameField, Move}
 import play.api.libs.json.Json
 import util.json.JsonReaders.*
 import util.json.JsonWriters.*
-import util.{Observable, handleResponse, sendHttpRequest}
+import util.{Observable, establishWebSocketConnection, handleResponse, sendHttpRequest}
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
+import scala.util.{Failure, Success}
 
 class CoreController extends Observable:
   implicit val system: ActorSystem[Any] = ActorSystem(Behaviors.empty, "CoreController")
   implicit val executionContext: ExecutionContextExecutor = system.executionContext
 
-  establishWebSocketConnection()
+  private val (gameFieldQueue, gameFieldSource) =
+    Source.queue[GameField](
+      bufferSize = 100,
+      overflowStrategy = OverflowStrategy.dropHead
+    ).preMaterialize()
 
-  def gameField: Future[GameField] =
-    val request = HttpRequest(uri = "http://core-service:8082/core/gameField")
-    sendHttpRequest(request).flatMap { response =>
-      handleResponse(response)(jsonStr => Json.parse(jsonStr).as[GameField])
-    }
+  private val wsUrl = "ws://core-service:8082/core/changes"
+  private val messageHandler: Message => Unit = {
+    case message: TextMessage.Strict =>
+      val text = message.text
+      gameFieldQueue.offer(Json.parse(text).as[GameField])
+    case _ =>
+      println("Received non-strict message")
+  }
 
+  establishWebSocketConnection(wsUrl, messageHandler)
+
+  def gameFieldStream(): Source[GameField, NotUsed] = gameFieldSource
+  
   def possibleMoves: Future[List[Move]] =
     val request = HttpRequest(uri = "http://core-service:8082/core/possibleMoves")
     sendHttpRequest(request).flatMap { response =>
