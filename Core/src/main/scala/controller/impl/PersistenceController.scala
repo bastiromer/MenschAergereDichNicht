@@ -43,3 +43,40 @@ class PersistenceController extends PersistenceControllerInterface:
     sendHttpRequest(request).map { response =>
       handleResponse(response)(jsonStr => Json.parse(jsonStr))
     }
+
+  override def databaseLoad: Future[GameField] =
+    val request = HttpRequest(uri = s"http://persistence-service:8081/persistence/databaseLoad")
+    sendHttpRequest(request).flatMap { response =>
+      handleResponse(response)(jsonStr => Json.parse(jsonStr).as[GameField])
+    }
+
+  override def databaseSave(gameField: GameField): Future[Unit] =
+    val jsonBody = Json.toJson(gameField).toString()
+    val request = HttpRequest(
+      method = HttpMethods.POST,
+      uri = s"http://persistence-service:8081/persistence/databaseSave",
+      entity = HttpEntity(ContentTypes.`application/json`, jsonBody)
+    )
+    sendHttpRequest(request).map { response =>
+      handleResponse(response)(jsonStr => Json.parse(jsonStr))
+    }
+
+  override def databaseUpdate(gameField: GameField): Future[Unit] =
+    val jsonBody = Json.toJson(gameField).toString()
+    val request = HttpRequest(
+      method = HttpMethods.POST,
+      uri = s"http://persistence-service:8081/persistence/databaseUpdate",
+      entity = HttpEntity(ContentTypes.`application/json`, jsonBody)
+    )
+    sendHttpRequest(request).map { response =>
+      handleResponse(response)(jsonStr => Json.parse(jsonStr))
+    }
+
+  override def databaseDelete(): Future[Unit] =
+    val request = HttpRequest(
+      method = HttpMethods.POST,
+      uri = s"http://persistence-service:8081/persistence/databaseDelete"
+    )
+    sendHttpRequest(request).map { response =>
+      handleResponse(response)(jsonStr => Json.parse(jsonStr))
+    }

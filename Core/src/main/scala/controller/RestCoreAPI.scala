@@ -7,7 +7,7 @@ import akka.http.javadsl.server.RequestEntityExpectedRejection
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.ws.{BinaryMessage, Message, TextMessage}
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
-import akka.http.scaladsl.server.Directives.*
+import akka.http.scaladsl.server.Directives.{entity, *}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import controller.impl.{Controller, PersistenceController}
@@ -44,6 +44,7 @@ class RestCoreAPI:
       <p><a href="/core/redo">POST               ->     core/redo</a></p>
       <p><a href="/core/save">POST               ->     core/save</a></p>
       <p><a href="/core/load">POST               ->     core/load</a></p>
+      <p><a href="/core/newGame">POST            ->     core/newGame</a></p>
       <br>
     """.stripMargin
 
@@ -145,7 +146,18 @@ class RestCoreAPI:
       },
       path("core" / "changes") {
         handleWebSocketMessages(websocketChanges)
-      }
+      },
+      path("core" / "newGame") {
+        post {
+            try {
+              controller.deleteGame()
+              complete(HttpResponse(StatusCodes.OK, entity = ""))
+            } catch {
+              case ex: Exception =>
+                complete(HttpResponse(StatusCodes.Conflict, entity = ex.getMessage))
+            }
+          }
+      },
     )
 
   def start(): Unit =

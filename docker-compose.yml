@@ -1,11 +1,29 @@
 version: "3.9"
 
 services:
+
+  db:
+    image: postgres
+    restart: always
+    container_name: database
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: tbl
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+    ports:
+      - "5432:5432"
+    networks:
+      - my_network
+
   persistence:
     image: persistence:0.1.0-SNAPSHOT
     ports:
       - "8081:8081"
     container_name: persistence-service
+    depends_on:
+      - db
     networks:
       - my_network
     working_dir: /fileio

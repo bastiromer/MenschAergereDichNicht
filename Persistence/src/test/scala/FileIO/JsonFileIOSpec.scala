@@ -1,5 +1,6 @@
 package FileIO
 
+import Persistence.FileIO.JsonFileIO
 import model.GameField
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
