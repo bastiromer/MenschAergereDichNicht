@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  persistence:
+    image: persistence:0.1.0-SNAPSHOT
+    ports:
+      - "8081:8081"
+    container_name: persistence-service
+    networks:
+      - my_network
+    working_dir: /fileio
+    volumes:
+        - ./:/fileio:xro
+
+  core:
+    image: core:0.1.0-SNAPSHOT
+    ports:
+      - "8082:8082"
+    container_name: core-service
+    depends_on:
+      - persistence
+    networks:
+      - my_network
+
+  ui:
+    image: ui:0.1.0-SNAPSHOT
+    stdin_open: true
+    tty: true
+    container_name: ui-service
+    depends_on:
+      - core
+    networks:
+      - my_network
+    environment:
+      DISPLAY: $DISPLAY
+
+  ui2:
+    image: ui:0.1.0-SNAPSHOT
+    stdin_open: true
+    tty: true
+    container_name: ui-service2
+    depends_on:
+      - core
+    networks:
+      - my_network
+    environment:
+      DISPLAY: $DISPLAY
+
+networks:
+  my_network:
