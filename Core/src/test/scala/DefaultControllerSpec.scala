@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.concurrent.Await
-import concurrent.duration.DurationInt
+import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
 
 class DefaultControllerSpec extends AnyWordSpec with Matchers with BeforeAndAfterEach {
