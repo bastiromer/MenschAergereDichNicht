@@ -1,4 +1,5 @@
 import com.typesafe.sbt.packager.Keys.{dockerBaseImage, dockerExposedPorts}
+import sbt.librarymanagement.InclExclRule
 
 val scala3Version = "3.1.2"
 val scalacticVersion = "3.2.17"
@@ -77,6 +78,8 @@ lazy val model = project
     commonSettings
   )
 
+val gatlingExclude = Seq(("com.typesafe.akka", "akka-actor_2.13"), ("org.scala-lang.modules", "scala-java8-compat_2.13"), ("com.typesafe.akka","akka-slf4j_2.13")).toVector.map((org_name: Tuple2[String,String]) => InclExclRule(org_name._1, org_name._2))
+
 lazy val commonSettings: Seq[Def.Setting[?]] = Seq(
   scalaVersion := scala3Version,
   javacOptions ++= Seq("-encoding", "UTF-8"),
@@ -93,9 +96,10 @@ lazy val commonSettings: Seq[Def.Setting[?]] = Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaActorVersion,
     "com.typesafe.slick" %% "slick" % slickVersion cross CrossVersion.for3Use2_13,
     "org.postgresql" % "postgresql" % postgresqlVersion,
-    "org.mongodb.scala" %% "mongo-scala-driver" % mongoVersion cross CrossVersion.for3Use2_13
-  ),
-)
+    "org.mongodb.scala" %% "mongo-scala-driver" % mongoVersion cross CrossVersion.for3Use2_13,
+    ("io.gatling.highcharts" % "gatling-charts-highcharts" % "3.9.5" % "test").withExclusions(gatlingExclude),
+    ("io.gatling" % "gatling-test-framework" % "3.9.5" % "test").withExclusions(gatlingExclude)
+  ))
 
 lazy val coverage: Seq[Def.Setting[?]] = Seq(
   jacocoReportSettings := JacocoReportSettings(
