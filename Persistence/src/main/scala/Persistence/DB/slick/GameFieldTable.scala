@@ -12,4 +12,3 @@ class GameFieldTable(tag: Tag) extends Table[(Option[Int], Int, Int)](tag, "GAME
 
   def * = (id, stateId, mapId)
 }
-

@@ -25,7 +25,6 @@ class Mongo extends DAOInterface:
   private val database_pw = sys.env.getOrElse("MONGO_ROOT_PASSWORD", "mongo")
   private val database_username = sys.env.getOrElse("MONGO_ROOT_USERNAME", "root")
   private val host = sys.env.getOrElse("MONGO_HOST", "mongoDB")
-  //private val host = sys.env.getOrElse("MONGO_HOST", "localhost")
   private val port = sys.env.getOrElse("MONGO_PORT", "27017")
 
   private val uri: String = s"mongodb://$database_username:$database_pw@$host:$port/?authSource=admin"
@@ -101,4 +100,3 @@ class Mongo extends DAOInterface:
   private def handleDeleteResult(obs: SingleObservable[DeleteResult]): Unit =
     Await.result(obs.asInstanceOf[SingleObservable[Unit]].head(), 10.seconds)
     println("Delete successful")
-

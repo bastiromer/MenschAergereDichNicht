@@ -1,5 +1,8 @@
-import controller.RestCoreAPI
+import controller.CoreService
+import controller.impl.{Controller, PersistenceController}
 
 @main def core(): Unit =
-  val restCoreAPI = RestCoreAPI()
-  restCoreAPI.start()
+  val persistenceController: PersistenceController = PersistenceController()
+  val controller = new Controller(using persistenceController)
+  val kafkaCoreService = CoreService(controller)
+  kafkaCoreService.start()
